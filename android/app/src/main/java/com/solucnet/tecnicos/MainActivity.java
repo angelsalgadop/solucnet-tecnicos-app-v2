@@ -21,6 +21,14 @@ public class MainActivity extends BridgeActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // Aplicar WebViewClient personalizado que acepta certificados SSL
+        getBridge().getWebView().setWebViewClient(new SSLWebViewClient());
+    }
+
+    @Override
     public void onBackPressed() {
         // Si están en la página principal (login o visitas), manejar doble presión
         if (shouldShowExitDialog()) {
