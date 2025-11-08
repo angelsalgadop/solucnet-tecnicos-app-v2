@@ -2,6 +2,10 @@ package com.solucnet.tecnicos;
 
 import android.os.Bundle;
 import android.widget.Toast;
+import android.view.WindowManager;
+import android.os.Build;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.appcompat.app.AlertDialog;
 import com.getcapacitor.BridgeActivity;
 
@@ -13,6 +17,22 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Configurar la ventana para respetar los insets del sistema (status bar, navigation bar)
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        // Hacer que la status bar sea transparente pero con contenido oscuro
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(android.graphics.Color.TRANSPARENT);
+
+            // Configurar el color de los iconos de la status bar
+            WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+            if (windowInsetsController != null) {
+                // true = iconos oscuros (para fondo claro), false = iconos claros (para fondo oscuro)
+                windowInsetsController.setAppearanceLightStatusBars(true);
+            }
+        }
 
         // Habilitar debugging de WebView para inspeccionar desde Chrome
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
