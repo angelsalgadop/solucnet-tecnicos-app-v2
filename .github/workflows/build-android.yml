@@ -29,10 +29,17 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm list @capacitor/android @capacitor/app @capacitor/camera --depth=0 || true
 
       - name: Generate app icons
         run: node generate-icons.js
+
+      - name: Verify Capacitor modules
+        run: |
+          echo "Verificando módulos de Capacitor..."
+          ls -la node_modules/@capacitor/ || echo "Directorio @capacitor no encontrado"
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4
@@ -47,10 +54,21 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
 
+      - name: Verify Android project structure
+        run: |
+          echo "Verificando estructura del proyecto Android..."
+          ls -la android/
+          echo "---"
+          echo "Verificando gradlew..."
+          ls -la android/gradlew
+          echo "---"
+          echo "Verificando node_modules desde android..."
+          ls -la node_modules/@capacitor/android/capacitor/ || echo "Módulo capacitor-android no encontrado"
+
       - name: Build Android APK (Debug)
         run: |
           cd android
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug --stacktrace --info --no-daemon
 
       - name: Build Android APK (Release - Unsigned)
         run: |
