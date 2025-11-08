@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test: Notificación Solo Una Vez</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f0f2f5;
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .chat-btn {
+            padding: 12px 20px;
+            border: none;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            margin: 5px;
+        }
+        .chat-btn:hover {
+            background: #0056b3;
+        }
+        .chat-btn.active {
+            background: #00d4aa;
+        }
+        .clear-btn {
+            background: #dc3545;
+        }
+        .clear-btn:hover {
+            background: #c82333;
+        }
+        #notification-area {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            width: 100%;
+            text-align: center;
+            pointer-events: none;
+        }
+        #messages-area { 
+            border: 1px solid #ddd; 
+            height: 300px; 
+            padding: 20px; 
+            background: #fafafa; 
+            margin: 15px 0;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+        #status {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 15px 0;
+        }
+        #log {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 11px;
+            border: 1px solid #dee2e6;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        :root {
+            --primary-color: #00d4aa;
+        }
+        h1 { color: #333; }
+        h3 { color: #666; margin-top: 25px; }
+        .success { color: #28a745; }
+        .warning { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-bell"></i> Test: Notificación "X mensajes cargados" - Solo Una Vez</h1>
+        
+        <div class="highlight">
+            <strong>🎯 Objetivo:</strong> Demostrar que la notificación de "50 mensajes cargados" aparece <strong>SOLO UNA VEZ</strong> por chat, 
+            no importa cuántas veces lo abras después.
+        </div>
+
+        <div class="test-section">
+            <h3>📱 Controles de Prueba</h3>
+            <button class="chat-btn" onclick="openChat('chat1')">Abrir Chat 1 (Familia)</button>
+            <button class="chat-btn" onclick="openChat('chat2')">Abrir Chat 2 (Trabajo)</button>
+            <button class="chat-btn" onclick="openChat('chat3')">Abrir Chat 3 (Amigos)</button>
+            <br><br>
+            <button class="chat-btn clear-btn" onclick="resetNotifications()">Reset Notificaciones</button>
+            <button class="chat-btn clear-btn" onclick="clearAllData()">Limpiar Todo</button>
+        </div>
+
+        <div id="notification-area"></div>
+
+        <h3>📊 Estado Actual</h3>
+        <div id="status">Sistema inicializado...</div>
+
+        <h3>📱 Mensajes del Chat</h3>
+        <div id="messages-area">Selecciona un chat para ver los mensajes</div>
+
+        <h3>📋 Log de Actividad</h3>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        // Simular las variables del sistema real
+        let loadedChatsCache = new Set();
+        let chatMessagesCache = new Map();
+        let notificationShownChats = new Set(); // ⭐ Esta es la nueva variable clave
+        let currentChatId = null;
+
+        // Datos de prueba
+        const mockChats = {
+            'chat1': {
+                name: 'Familia',
+                messages: [
+                    { id: '1', body: '¡Hola familia! ¿Cómo están todos?', fromMe: false, timestamp: Date.now() - 86400000 },
+                    { id: '2', body: 'Todo bien por aquí, gracias por preguntar', fromMe: true, timestamp: Date.now() - 86300000 },
+                    { id: '3', body: 'Perfecto, planeando la reunión del domingo', fromMe: false, timestamp: Date.now() - 86200000 },
+                ]
+            },
+            'chat2': {
+                name: 'Trabajo', 
+                messages: [
+                    { id: '4', body: 'Buenos días equipo, revisión a las 10am', fromMe: false, timestamp: Date.now() - 43200000 },
+                    { id: '5', body: 'Perfecto, ya tengo listo el reporte', fromMe: true, timestamp: Date.now() - 43100000 }
+                ]
+            },
+            'chat3': {
+                name: 'Amigos',
+                messages: [
+                    { id: '6', body: '¿Salimos este viernes?', fromMe: false, timestamp: Date.now() - 172800000 },
+                    { id: '7', body: '¡Claro! ¿Dónde nos vemos?', fromMe: true, timestamp: Date.now() - 172700000 },
+                    { id: '8', body: 'En el lugar de siempre, 8pm', fromMe: false, timestamp: Date.now() - 172600000 }
+                ]
+            }
+        };
+
+        // ⭐ FUNCIÓN PRINCIPAL: Simula la lógica de selectChat con notificación una vez
+        function openChat(chatId) {
+            currentChatId = chatId;
+            const chat = mockChats[chatId];
+            
+            // Actualizar botones
+            document.querySelectorAll('.chat-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            log(`🔄 Abriendo chat: ${chat.name} (${chatId})`);
+
+            // ⭐ LÓGICA CLAVE: Verificar si ya se mostró la notificación
+            const alreadyShownNotification = notificationShownChats.has(chatId);
+            const isFirstLoad = !loadedChatsCache.has(chatId);
+
+            if (isFirstLoad) {
+                // Primera carga: simular loading y mostrar notificación
+                log(`📚 Primera carga de ${chat.name} - simulando carga desde API...`);
+                
+                showLoadingIndicator();
+                
+                setTimeout(() => {
+                    // Cargar mensajes por primera vez
+                    chatMessagesCache.set(chatId, [...chat.messages]);
+                    loadedChatsCache.add(chatId);
+                    displayMessages(chat.messages);
+                    
+                    // ⭐ MOSTRAR NOTIFICACIÓN SOLO SI NO SE HA MOSTRADO ANTES
+                    if (!alreadyShownNotification) {
+                        notificationShownChats.add(chatId);
+                        showHistoryLoadedNotification(chat.messages.length, chat.name);
+                        log(`🔔 NOTIFICACIÓN MOSTRADA para ${chat.name} (primera vez)`);
+                    } else {
+                        log(`⏸️ Notificación omitida para ${chat.name} (ya se mostró antes)`);
+                    }
+                    
+                    updateStatus();
+                }, 1500);
+                
+            } else {
+                // Carga posterior: usar caché y NO mostrar notificación
+                log(`💾 Carga posterior de ${chat.name} - usando caché (no mostrar notificación)`);
+                const cachedMessages = chatMessagesCache.get(chatId);
+                displayMessages(cachedMessages);
+                
+                if (!alreadyShownNotification) {
+                    log(`⚠️ ERROR: Este caso no debería ocurrir - chat en caché pero sin notificación mostrada`);
+                } else {
+                    log(`✅ Notificación correctamente omitida para ${chat.name} (ya se mostró antes)`);
+                }
+                
+                updateStatus();
+            }
+        }
+
+        // ⭐ Función que muestra la notificación (igual que en el código real)
+        function showHistoryLoadedNotification(messageCount, chatName) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                background: rgba(0, 212, 170, 0.95);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 20px;
+                font-size: 0.9em;
+                font-weight: 500;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+                pointer-events: none;
+                display: inline-block;
+                margin: 5px;
+            `;
+            notification.innerHTML = `📚 ${messageCount} mensajes del historial cargados (${chatName})`;
+            
+            const notificationArea = document.getElementById('notification-area');
+            notificationArea.appendChild(notification);
+            
+            // Fade in
+            setTimeout(() => notification.style.opacity = '1', 50);
+            
+            // Fade out y remover
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        function showLoadingIndicator() {
+            const messagesArea = document.getElementById('messages-area');
+            messagesArea.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #8b949e; text-align: center;">
+                    <div style="margin-bottom: 15px;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2em; color: var(--primary-color);"></i>
+                    </div>
+                    <div style="font-weight: 500;">Cargando mensajes del historial...</div>
+                    <div style="font-size: 0.8em; color: #adb5bd; margin-top: 5px;">Primera carga desde API</div>
+                </div>
+            `;
+        }
+
+        function displayMessages(messages) {
+            const messagesArea = document.getElementById('messages-area');
+            messagesArea.innerHTML = messages.map(msg => 
+                `<div style="margin: 8px 0; padding: 10px; background: ${msg.fromMe ? '#dcf8c6' : 'white'}; border-radius: 8px; border: 1px solid ${msg.fromMe ? '#c9e7a3' : '#e9ecef'};">
+                    <div style="font-weight: 500; color: ${msg.fromMe ? '#155724' : '#495057'}; font-size: 0.9em;">
+                        ${msg.fromMe ? 'Tú' : 'Contacto'}
+                    </div>
+                    <div style="margin: 5px 0;">${msg.body}</div>
+                    <div style="font-size: 0.7em; color: #6c757d; text-align: right;">
+                        ${new Date(msg.timestamp).toLocaleTimeString()}
+                    </div>
+                </div>`
+            ).join('');
+        }
+
+        function updateStatus() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `
+                <strong>📊 Estado del Sistema:</strong><br>
+                • Chats cargados: ${loadedChatsCache.size} (${Array.from(loadedChatsCache).join(', ')})<br>
+                • Mensajes en caché: ${Array.from(chatMessagesCache.values()).reduce((total, msgs) => total + msgs.length, 0)}<br>
+                • <span class="success">✅ Notificaciones mostradas: ${notificationShownChats.size} (${Array.from(notificationShownChats).join(', ')})</span><br>
+                <br>
+                <strong>🎯 Próximo test:</strong><br>
+                • Chats SIN notificación: <span class="warning">${Array.from(['chat1', 'chat2', 'chat3']).filter(id => !notificationShownChats.has(id)).join(', ') || 'Ninguno'}</span><br>
+                • Chats CON notificación: <span class="success">${Array.from(notificationShownChats).join(', ') || 'Ninguno'}</span>
+            `;
+        }
+
+        // Funciones de control
+        function resetNotifications() {
+            notificationShownChats.clear();
+            log('🔄 RESET: Notificaciones limpiadas - ahora se mostrarán de nuevo');
+            updateStatus();
+        }
+
+        function clearAllData() {
+            loadedChatsCache.clear();
+            chatMessagesCache.clear();
+            notificationShownChats.clear();
+            document.getElementById('messages-area').innerHTML = 'Selecciona un chat para ver los mensajes';
+            log('🧹 LIMPIEZA TOTAL: Todo el sistema reiniciado');
+            updateStatus();
+        }
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const isImportant = message.includes('NOTIFICACIÓN') || message.includes('primera vez') || message.includes('omitida');
+            const style = isImportant ? 'background: #fff3cd; border-left: 3px solid #ffc107;' : 'border-left: 3px solid var(--primary-color);';
+            
+            logDiv.innerHTML += `<div style="margin: 3px 0; padding: 5px; ${style} padding-left: 8px;">
+                <span style="color: #666; font-size: 10px;">[${timestamp}]</span> ${message}
+            </div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // Inicialización
+        log('🚀 Sistema de notificación única inicializado');
+        log('💡 Abre cualquier chat varias veces - la notificación aparecerá solo LA PRIMERA VEZ');
+        updateStatus();
+    </script>
+</body>
+</html>

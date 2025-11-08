@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Cache System - Carga Una Sola Vez</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f0f2f5;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .chat-selector {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .chat-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .chat-btn:hover {
+            background: #0056b3;
+        }
+        .chat-btn.active {
+            background: #00d4aa;
+        }
+        #messages-area { 
+            border: 1px solid #ddd; 
+            height: 400px; 
+            padding: 20px; 
+            background: #fafafa; 
+            margin: 20px 0;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+        #cache-status {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 15px 0;
+        }
+        #log {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            border: 1px solid #dee2e6;
+        }
+        .cache-info {
+            background: #d1ecf1;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #17a2b8;
+        }
+        :root {
+            --primary-color: #00d4aa;
+        }
+        h1 { color: #333; }
+        h3 { color: #666; margin-top: 25px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-database"></i> Test del Sistema de Caché</h1>
+        <p><strong>Funcionalidad:</strong> Los mensajes viejos se cargan una sola vez por chat. Las siguientes aperturas usan el caché.</p>
+        
+        <div class="cache-info">
+            <strong>💾 Cómo funciona:</strong>
+            <ul style="margin: 5px 0 0 20px;">
+                <li><strong>Primera apertura:</strong> Muestra loading → Carga mensajes desde API → Guarda en caché</li>
+                <li><strong>Aperturas posteriores:</strong> Muestra mensajes inmediatamente desde caché → Solo actualiza mensajes nuevos</li>
+                <li><strong>Mensajes nuevos:</strong> Se agregan al caché automáticamente</li>
+            </ul>
+        </div>
+
+        <div class="chat-selector">
+            <button class="chat-btn" onclick="selectTestChat('chat1')">Chat 1 (Familia)</button>
+            <button class="chat-btn" onclick="selectTestChat('chat2')">Chat 2 (Trabajo)</button>
+            <button class="chat-btn" onclick="selectTestChat('chat3')">Chat 3 (Amigos)</button>
+            <button class="chat-btn" onclick="clearAllCache()" style="background: #dc3545;">Limpiar Todo el Caché</button>
+        </div>
+
+        <h3>📱 Área de Mensajes</h3>
+        <div id="messages-area">Selecciona un chat para ver los mensajes</div>
+
+        <h3>💾 Estado del Caché</h3>
+        <div id="cache-status">No hay datos en caché</div>
+
+        <h3>📋 Log de Actividad</h3>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        // Simular el sistema de caché del código real
+        let loadedChatsCache = new Set();
+        let chatMessagesCache = new Map();
+        let currentChatId = null;
+
+        // Datos de prueba simulando mensajes de diferentes chats
+        const mockMessageData = {
+            'chat1': [
+                { id: 'msg1_1', body: '¡Hola familia! ¿Cómo están?', fromMe: false, timestamp: Date.now() - 86400000 },
+                { id: 'msg1_2', body: 'Todo bien por aquí, ¿y ustedes?', fromMe: true, timestamp: Date.now() - 86300000 },
+                { id: 'msg1_3', body: 'Perfecto, planeando la reunión familiar', fromMe: false, timestamp: Date.now() - 86200000 },
+                { id: 'msg1_4', body: 'Excelente idea, confirmamos para el domingo', fromMe: true, timestamp: Date.now() - 86100000 }
+            ],
+            'chat2': [
+                { id: 'msg2_1', body: 'Buenos días equipo, revisión de proyecto a las 10am', fromMe: false, timestamp: Date.now() - 43200000 },
+                { id: 'msg2_2', body: 'Perfecto, ya tengo listo el reporte', fromMe: true, timestamp: Date.now() - 43100000 },
+                { id: 'msg2_3', body: 'Excelente trabajo en la presentación', fromMe: false, timestamp: Date.now() - 43000000 }
+            ],
+            'chat3': [
+                { id: 'msg3_1', body: '¿Salimos este viernes?', fromMe: false, timestamp: Date.now() - 172800000 },
+                { id: 'msg3_2', body: '¡Claro! ¿Dónde nos vemos?', fromMe: true, timestamp: Date.now() - 172700000 },
+                { id: 'msg3_3', body: 'En el lugar de siempre, 8pm', fromMe: false, timestamp: Date.now() - 172600000 },
+                { id: 'msg3_4', body: 'Perfecto, ahí estaremos', fromMe: true, timestamp: Date.now() - 172500000 },
+                { id: 'msg3_5', body: 'Va a ser divertido como siempre', fromMe: false, timestamp: Date.now() - 172400000 }
+            ]
+        };
+
+        // Función principal que simula selectChat con caché
+        function selectTestChat(chatId) {
+            currentChatId = chatId;
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.chat-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            log(`🔄 Seleccionando chat: ${chatId}`);
+
+            // *** LÓGICA DEL CACHÉ: Igual que en el código real ***
+            if (loadedChatsCache.has(chatId) && chatMessagesCache.has(chatId)) {
+                // Chat ya tiene mensajes cargados - mostrarlos inmediatamente desde el caché
+                log(`📋 Chat ${chatId} ya tiene mensajes cargados - usando caché`);
+                const cachedMessages = chatMessagesCache.get(chatId);
+                displayMessages(cachedMessages);
+                
+                // Simular verificación de mensajes nuevos
+                setTimeout(() => {
+                    log(`🔍 Verificando mensajes nuevos para ${chatId}... (sin recargar completo)`);
+                    checkForNewMessages(chatId);
+                }, 500);
+            } else {
+                // Primera carga de este chat - mostrar indicador y cargar mensajes viejos
+                log(`🔄 Primera carga para chat ${chatId} - cargando mensajes viejos...`);
+                
+                // Mostrar indicador de carga
+                showLazyLoadingIndicator();
+                
+                // Simular carga de mensajes viejos por primera vez
+                setTimeout(() => {
+                    loadMessagesFirstTime(chatId);
+                }, 1500); // Simular delay de red
+            }
+
+            updateCacheStatus();
+        }
+
+        // Simular carga de mensajes por primera vez
+        function loadMessagesFirstTime(chatId) {
+            log(`📡 Cargando mensajes desde API para ${chatId}...`);
+            
+            const messages = mockMessageData[chatId] || [];
+            
+            // Guardar en caché (primera vez)
+            chatMessagesCache.set(chatId, [...messages]);
+            loadedChatsCache.add(chatId);
+            log(`💾 Chat ${chatId} agregado al caché con ${messages.length} mensajes`);
+            
+            displayMessages(messages);
+            updateCacheStatus();
+        }
+
+        // Simular verificación de mensajes nuevos
+        function checkForNewMessages(chatId) {
+            // Simular que a veces hay mensajes nuevos
+            const hasNewMessages = Math.random() < 0.3; // 30% probabilidad
+            
+            if (hasNewMessages) {
+                const newMessage = {
+                    id: `new_${chatId}_${Date.now()}`,
+                    body: 'Este es un mensaje nuevo que llegó ahora',
+                    fromMe: Math.random() < 0.5,
+                    timestamp: Date.now()
+                };
+
+                // Agregar al caché existente
+                const cachedMessages = chatMessagesCache.get(chatId);
+                cachedMessages.push(newMessage);
+                chatMessagesCache.set(chatId, cachedMessages);
+                
+                log(`📬 Mensaje nuevo agregado al caché de ${chatId}`);
+                displayMessages(cachedMessages);
+                updateCacheStatus();
+            } else {
+                log(`✅ No hay mensajes nuevos para ${chatId}`);
+            }
+        }
+
+        // Funciones de UI
+        function showLazyLoadingIndicator() {
+            const messagesArea = document.getElementById('messages-area');
+            messagesArea.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #8b949e; text-align: center;">
+                    <div style="margin-bottom: 15px;">
+                        <i class="fas fa-comment-dots" style="font-size: 2.5em; color: var(--primary-color); animation: pulse 1.5s ease-in-out infinite;"></i>
+                    </div>
+                    <div style="font-weight: 500; margin-bottom: 5px;">Cargando mensajes viejos...</div>
+                    <div style="font-size: 0.8em; color: #adb5bd;">Primera carga desde API</div>
+                </div>
+                <style>
+                    @keyframes pulse {
+                        0% { opacity: 0.6; transform: scale(1); }
+                        50% { opacity: 1; transform: scale(1.05); }
+                        100% { opacity: 0.6; transform: scale(1); }
+                    }
+                </style>
+            `;
+        }
+
+        function displayMessages(messages) {
+            const messagesArea = document.getElementById('messages-area');
+            
+            if (!messages || messages.length === 0) {
+                messagesArea.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No hay mensajes en este chat</div>';
+                return;
+            }
+
+            messagesArea.innerHTML = messages.map(msg => 
+                `<div style="margin: 10px 0; padding: 12px; background: ${msg.fromMe ? '#dcf8c6' : 'white'}; border-radius: 8px; border: 1px solid ${msg.fromMe ? '#c9e7a3' : '#e9ecef'};">
+                    <div style="font-weight: 500; color: ${msg.fromMe ? '#155724' : '#495057'};">
+                        ${msg.fromMe ? 'Tú' : 'Contacto'}
+                    </div>
+                    <div style="margin: 5px 0;">${msg.body}</div>
+                    <div style="font-size: 0.75em; color: #6c757d; text-align: right;">
+                        ${new Date(msg.timestamp).toLocaleString()}
+                    </div>
+                </div>`
+            ).join('');
+
+            log(`✅ Mostrando ${messages.length} mensajes en pantalla`);
+        }
+
+        function updateCacheStatus() {
+            const stats = getCacheStats();
+            const statusDiv = document.getElementById('cache-status');
+            
+            statusDiv.innerHTML = `
+                <strong>📊 Estado del Caché:</strong><br>
+                • Chats cargados: ${stats.totalCachedChats}<br>
+                • Mensajes totales: ${stats.totalCachedMessages}<br>
+                • IDs en caché: ${stats.cachedChatIds.join(', ') || 'Ninguno'}<br>
+                <br>
+                <strong>💡 Próxima apertura:</strong> ${stats.totalCachedChats > 0 ? 'Usará caché (instantáneo)' : 'Cargará desde API'}
+            `;
+        }
+
+        function getCacheStats() {
+            return {
+                totalCachedChats: loadedChatsCache.size,
+                totalCachedMessages: Array.from(chatMessagesCache.values()).reduce((total, messages) => total + messages.length, 0),
+                cachedChatIds: Array.from(loadedChatsCache)
+            };
+        }
+
+        function clearAllCache() {
+            loadedChatsCache.clear();
+            chatMessagesCache.clear();
+            updateCacheStatus();
+            log('🧹 Todo el caché ha sido limpiado');
+            
+            const messagesArea = document.getElementById('messages-area');
+            messagesArea.innerHTML = 'Selecciona un chat para ver los mensajes';
+        }
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div style="margin: 2px 0; padding: 3px; border-left: 3px solid var(--primary-color); padding-left: 8px;">
+                <span style="color: #666; font-size: 11px;">[${timestamp}]</span> ${message}
+            </div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // Inicialización
+        log('🚀 Sistema de caché inicializado');
+        log('💡 Selecciona un chat para probar el sistema');
+        updateCacheStatus();
+    </script>
+</body>
+</html>

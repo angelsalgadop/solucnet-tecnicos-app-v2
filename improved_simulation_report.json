@@ -1,0 +1,1406 @@
+{
+  "timestamp": "2025-09-05T16:23:23.453Z",
+  "duration": 120149,
+  "numClients": 30,
+  "totalAttempted": 59,
+  "totalSuccessful": 59,
+  "totalFailed": 0,
+  "successRate": 100,
+  "messagesPerSecond": 0.4910569376357689,
+  "maxConcurrentRequests": 3,
+  "messageDelayRange": [
+    15000,
+    45000
+  ],
+  "results": [
+    {
+      "messageCount": 2,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:44.195Z",
+          "message": "Buenas tardes",
+          "result": {
+            "success": true,
+            "phone": "573145488723@c.us",
+            "message": "Buenas tardes",
+            "name": "Carlos Rodríguez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573145488723@c.us",
+                "body": "Buenas tardes",
+                "pushname": "Carlos Rodríguez",
+                "timestamp": 1757089303,
+                "messageId": "simulated_573145488723@c.us_1757089303176_1id2ba7nt"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:16.780Z",
+          "message": "Consulta sobre mi factura",
+          "result": {
+            "success": true,
+            "phone": "573145488723@c.us",
+            "message": "Consulta sobre mi factura",
+            "name": "Carlos Rodríguez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573145488723@c.us",
+                "body": "Consulta sobre mi factura",
+                "pushname": "Carlos Rodríguez",
+                "timestamp": 1757089334,
+                "messageId": "simulated_573145488723@c.us_1757089334750_5rdc15fbj"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:53.235Z",
+          "message": "Hola, buenos días",
+          "result": {
+            "success": true,
+            "phone": "573124132300@c.us",
+            "message": "Hola, buenos días",
+            "name": "María García",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573124132300@c.us",
+                "body": "Hola, buenos días",
+                "pushname": "María García",
+                "timestamp": 1757089312,
+                "messageId": "simulated_573124132300@c.us_1757089312201_h05pi21dy"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:14.637Z",
+          "message": "Cómo puedo contratar el servicio?",
+          "result": {
+            "success": true,
+            "phone": "573124132300@c.us",
+            "message": "Cómo puedo contratar el servicio?",
+            "name": "María García",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573124132300@c.us",
+                "body": "Cómo puedo contratar el servicio?",
+                "pushname": "María García",
+                "timestamp": 1757089332,
+                "messageId": "simulated_573124132300@c.us_1757089332628_pmm5imhu3"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:37.157Z",
+          "message": "Planes",
+          "result": {
+            "success": true,
+            "phone": "573124132300@c.us",
+            "message": "Planes",
+            "name": "María García",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573124132300@c.us",
+                "body": "Planes",
+                "pushname": "María García",
+                "timestamp": 1757089355,
+                "messageId": "simulated_573124132300@c.us_1757089355140_erdkm80m3"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:50.778Z",
+          "message": "Hola, buenos días",
+          "result": {
+            "success": true,
+            "phone": "573117596819@c.us",
+            "message": "Hola, buenos días",
+            "name": "José López",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573117596819@c.us",
+                "body": "Hola, buenos días",
+                "pushname": "José López",
+                "timestamp": 1757089310,
+                "messageId": "simulated_573117596819@c.us_1757089310551_z6ttx96ql"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:17.713Z",
+          "message": "Buenas tardes",
+          "result": {
+            "success": true,
+            "phone": "573117596819@c.us",
+            "message": "Buenas tardes",
+            "name": "José López",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573117596819@c.us",
+                "body": "Buenas tardes",
+                "pushname": "José López",
+                "timestamp": 1757089335,
+                "messageId": "simulated_573117596819@c.us_1757089335706_ya2e64mo6"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:51.565Z",
+          "message": "1",
+          "result": {
+            "success": true,
+            "phone": "573117596819@c.us",
+            "message": "1",
+            "name": "José López",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573117596819@c.us",
+                "body": "1",
+                "pushname": "José López",
+                "timestamp": 1757089369,
+                "messageId": "simulated_573117596819@c.us_1757089369551_e2koeczzg"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:42.001Z",
+          "message": "Hola, necesito información",
+          "result": {
+            "success": true,
+            "phone": "573168577389@c.us",
+            "message": "Hola, necesito información",
+            "name": "Ana Martínez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573168577389@c.us",
+                "body": "Hola, necesito información",
+                "pushname": "Ana Martínez",
+                "timestamp": 1757089301,
+                "messageId": "simulated_573168577389@c.us_1757089301974_xhdiycts4"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 2,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:50.095Z",
+          "message": "Buenas tardes",
+          "result": {
+            "success": true,
+            "phone": "573131646956@c.us",
+            "message": "Buenas tardes",
+            "name": "Pedro Pérez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573131646956@c.us",
+                "body": "Buenas tardes",
+                "pushname": "Pedro Pérez",
+                "timestamp": 1757089310,
+                "messageId": "simulated_573131646956@c.us_1757089310077_3x9ks8a66"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:14.880Z",
+          "message": "El internet está muy lento",
+          "result": {
+            "success": true,
+            "phone": "573131646956@c.us",
+            "message": "El internet está muy lento",
+            "name": "Pedro Pérez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573131646956@c.us",
+                "body": "El internet está muy lento",
+                "pushname": "Pedro Pérez",
+                "timestamp": 1757089332,
+                "messageId": "simulated_573131646956@c.us_1757089332874_5wwouuifx"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:33.749Z",
+          "message": "Buenas tardes",
+          "result": {
+            "success": true,
+            "phone": "573118567862@c.us",
+            "message": "Buenas tardes",
+            "name": "Laura Sánchez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573118567862@c.us",
+                "body": "Buenas tardes",
+                "pushname": "Laura Sánchez",
+                "timestamp": 1757089293,
+                "messageId": "simulated_573118567862@c.us_1757089293445_davfbbky2"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:40.332Z",
+          "message": "Buenas tardes",
+          "result": {
+            "success": true,
+            "phone": "573147991050@c.us",
+            "message": "Buenas tardes",
+            "name": "David González",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573147991050@c.us",
+                "body": "Buenas tardes",
+                "pushname": "David González",
+                "timestamp": 1757089300,
+                "messageId": "simulated_573147991050@c.us_1757089300313_91q4tgbkh"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:13.498Z",
+          "message": "Qué velocidades manejan?",
+          "result": {
+            "success": true,
+            "phone": "573147991050@c.us",
+            "message": "Qué velocidades manejan?",
+            "name": "David González",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573147991050@c.us",
+                "body": "Qué velocidades manejan?",
+                "pushname": "David González",
+                "timestamp": 1757089331,
+                "messageId": "simulated_573147991050@c.us_1757089331492_fsu04gjt9"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:41.087Z",
+          "message": "3",
+          "result": {
+            "success": true,
+            "phone": "573147991050@c.us",
+            "message": "3",
+            "name": "David González",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573147991050@c.us",
+                "body": "3",
+                "pushname": "David González",
+                "timestamp": 1757089359,
+                "messageId": "simulated_573147991050@c.us_1757089359080_6etb25cu5"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:34.337Z",
+          "message": "Hola, necesito información",
+          "result": {
+            "success": true,
+            "phone": "573128887033@c.us",
+            "message": "Hola, necesito información",
+            "name": "Carmen Fernández",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573128887033@c.us",
+                "body": "Hola, necesito información",
+                "pushname": "Carmen Fernández",
+                "timestamp": 1757089294,
+                "messageId": "simulated_573128887033@c.us_1757089294320_sirfku5dd"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:06.640Z",
+          "message": "Cómo puedo pagar?",
+          "result": {
+            "success": true,
+            "phone": "573128887033@c.us",
+            "message": "Cómo puedo pagar?",
+            "name": "Carmen Fernández",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573128887033@c.us",
+                "body": "Cómo puedo pagar?",
+                "pushname": "Carmen Fernández",
+                "timestamp": 1757089324,
+                "messageId": "simulated_573128887033@c.us_1757089324635_g28nuktki"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:40.465Z",
+          "message": "Quiero cambiar de plan",
+          "result": {
+            "success": true,
+            "phone": "573128887033@c.us",
+            "message": "Quiero cambiar de plan",
+            "name": "Carmen Fernández",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573128887033@c.us",
+                "body": "Quiero cambiar de plan",
+                "pushname": "Carmen Fernández",
+                "timestamp": 1757089358,
+                "messageId": "simulated_573128887033@c.us_1757089358458_labvwrffe"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:54.814Z",
+          "message": "Hola, buenos días",
+          "result": {
+            "success": true,
+            "phone": "573111155343@c.us",
+            "message": "Hola, buenos días",
+            "name": "Miguel Torres",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573111155343@c.us",
+                "body": "Hola, buenos días",
+                "pushname": "Miguel Torres",
+                "timestamp": 1757089314,
+                "messageId": "simulated_573111155343@c.us_1757089314573_d2wao2zxu"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:40.771Z",
+          "message": "4",
+          "result": {
+            "success": true,
+            "phone": "573111155343@c.us",
+            "message": "4",
+            "name": "Miguel Torres",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573111155343@c.us",
+                "body": "4",
+                "pushname": "Miguel Torres",
+                "timestamp": 1757089358,
+                "messageId": "simulated_573111155343@c.us_1757089358764_ngz24n1bs"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:23:13.553Z",
+          "message": "Qué velocidades manejan?",
+          "result": {
+            "success": true,
+            "phone": "573111155343@c.us",
+            "message": "Qué velocidades manejan?",
+            "name": "Miguel Torres",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573111155343@c.us",
+                "body": "Qué velocidades manejan?",
+                "pushname": "Miguel Torres",
+                "timestamp": 1757089391,
+                "messageId": "simulated_573111155343@c.us_1757089391544_kdbbvi8zk"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 2,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:35.285Z",
+          "message": "Saludos",
+          "result": {
+            "success": true,
+            "phone": "573118867310@c.us",
+            "message": "Saludos",
+            "name": "Isabel Ruiz",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573118867310@c.us",
+                "body": "Saludos",
+                "pushname": "Isabel Ruiz",
+                "timestamp": 1757089295,
+                "messageId": "simulated_573118867310@c.us_1757089295256_w4iyxqwpg"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:12.839Z",
+          "message": "Cómo puedo pagar?",
+          "result": {
+            "success": true,
+            "phone": "573118867310@c.us",
+            "message": "Cómo puedo pagar?",
+            "name": "Isabel Ruiz",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573118867310@c.us",
+                "body": "Cómo puedo pagar?",
+                "pushname": "Isabel Ruiz",
+                "timestamp": 1757089330,
+                "messageId": "simulated_573118867310@c.us_1757089330833_wotv08aby"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 2,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:38.076Z",
+          "message": "Saludos",
+          "result": {
+            "success": true,
+            "phone": "573016322240@c.us",
+            "message": "Saludos",
+            "name": "Francisco Moreno",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573016322240@c.us",
+                "body": "Saludos",
+                "pushname": "Francisco Moreno",
+                "timestamp": 1757089298,
+                "messageId": "simulated_573016322240@c.us_1757089298063_kcio1m3c7"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:11.369Z",
+          "message": "4",
+          "result": {
+            "success": true,
+            "phone": "573016322240@c.us",
+            "message": "4",
+            "name": "Francisco Moreno",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573016322240@c.us",
+                "body": "4",
+                "pushname": "Francisco Moreno",
+                "timestamp": 1757089329,
+                "messageId": "simulated_573016322240@c.us_1757089329361_qdnlrjf3t"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:36.502Z",
+          "message": "Buenas tardes",
+          "result": {
+            "success": true,
+            "phone": "573012851151@c.us",
+            "message": "Buenas tardes",
+            "name": "Pilar Jiménez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573012851151@c.us",
+                "body": "Buenas tardes",
+                "pushname": "Pilar Jiménez",
+                "timestamp": 1757089295,
+                "messageId": "simulated_573012851151@c.us_1757089295272_59pff1110"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:42.683Z",
+          "message": "Hola, necesito información",
+          "result": {
+            "success": true,
+            "phone": "573009619686@c.us",
+            "message": "Hola, necesito información",
+            "name": "Antonio Muñoz",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573009619686@c.us",
+                "body": "Hola, necesito información",
+                "pushname": "Antonio Muñoz",
+                "timestamp": 1757089302,
+                "messageId": "simulated_573009619686@c.us_1757089302666_5cmz30d08"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:37.048Z",
+          "message": "Hola, buenos días",
+          "result": {
+            "success": true,
+            "phone": "573007737400@c.us",
+            "message": "Hola, buenos días",
+            "name": "Rosa Álvarez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573007737400@c.us",
+                "body": "Hola, buenos días",
+                "pushname": "Rosa Álvarez",
+                "timestamp": 1757089295,
+                "messageId": "simulated_573007737400@c.us_1757089296014_m1rerur27"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:57.254Z",
+          "message": "Hola, buenos días",
+          "result": {
+            "success": true,
+            "phone": "573024828757@c.us",
+            "message": "Hola, buenos días",
+            "name": "Manuel Romero",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573024828757@c.us",
+                "body": "Hola, buenos días",
+                "pushname": "Manuel Romero",
+                "timestamp": 1757089317,
+                "messageId": "simulated_573024828757@c.us_1757089317175_p224yc32g"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:22:01.937Z",
+          "message": "Hola, necesito información",
+          "result": {
+            "success": true,
+            "phone": "573152887855@c.us",
+            "message": "Hola, necesito información",
+            "name": "Dolores Navarro",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573152887855@c.us",
+                "body": "Hola, necesito información",
+                "pushname": "Dolores Navarro",
+                "timestamp": 1757089319,
+                "messageId": "simulated_573152887855@c.us_1757089319707_4bwmkzv4d"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:20.060Z",
+          "message": "Me parece bien",
+          "result": {
+            "success": true,
+            "phone": "573152887855@c.us",
+            "message": "Me parece bien",
+            "name": "Dolores Navarro",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573152887855@c.us",
+                "body": "Me parece bien",
+                "pushname": "Dolores Navarro",
+                "timestamp": 1757089338,
+                "messageId": "simulated_573152887855@c.us_1757089338054_6qpyudyvm"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:52.908Z",
+          "message": "Hola, necesito información",
+          "result": {
+            "success": true,
+            "phone": "573152887855@c.us",
+            "message": "Hola, necesito información",
+            "name": "Dolores Navarro",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573152887855@c.us",
+                "body": "Hola, necesito información",
+                "pushname": "Dolores Navarro",
+                "timestamp": 1757089370,
+                "messageId": "simulated_573152887855@c.us_1757089370894_mf97nyjwf"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 2,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:50.423Z",
+          "message": "Saludos",
+          "result": {
+            "success": true,
+            "phone": "573015085469@c.us",
+            "message": "Saludos",
+            "name": "Juan Gutiérrez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573015085469@c.us",
+                "body": "Saludos",
+                "pushname": "Juan Gutiérrez",
+                "timestamp": 1757089310,
+                "messageId": "simulated_573015085469@c.us_1757089310206_gqtf31f2i"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:32.018Z",
+          "message": "Contacto",
+          "result": {
+            "success": true,
+            "phone": "573015085469@c.us",
+            "message": "Contacto",
+            "name": "Juan Gutiérrez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573015085469@c.us",
+                "body": "Contacto",
+                "pushname": "Juan Gutiérrez",
+                "timestamp": 1757089349,
+                "messageId": "simulated_573015085469@c.us_1757089349868_lxmo2ovgj"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:43.890Z",
+          "message": "Saludos",
+          "result": {
+            "success": true,
+            "phone": "573138466153@c.us",
+            "message": "Saludos",
+            "name": "Teresa Herrera",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573138466153@c.us",
+                "body": "Saludos",
+                "pushname": "Teresa Herrera",
+                "timestamp": 1757089303,
+                "messageId": "simulated_573138466153@c.us_1757089303874_zijw2lg6p"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:47.843Z",
+          "message": "Hola, buenos días",
+          "result": {
+            "success": true,
+            "phone": "573156756127@c.us",
+            "message": "Hola, buenos días",
+            "name": "Ángel Vargas",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573156756127@c.us",
+                "body": "Hola, buenos días",
+                "pushname": "Ángel Vargas",
+                "timestamp": 1757089307,
+                "messageId": "simulated_573156756127@c.us_1757089307805_1zmn70xl2"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:37.558Z",
+          "message": "Saludos",
+          "result": {
+            "success": true,
+            "phone": "573008329615@c.us",
+            "message": "Saludos",
+            "name": "Concepción Castro",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573008329615@c.us",
+                "body": "Saludos",
+                "pushname": "Concepción Castro",
+                "timestamp": 1757089297,
+                "messageId": "simulated_573008329615@c.us_1757089297535_xeefupnij"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:21:59.616Z",
+          "message": "Qué documentos necesito?",
+          "result": {
+            "success": true,
+            "phone": "573008329615@c.us",
+            "message": "Qué documentos necesito?",
+            "name": "Concepción Castro",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573008329615@c.us",
+                "body": "Qué documentos necesito?",
+                "pushname": "Concepción Castro",
+                "timestamp": 1757089319,
+                "messageId": "simulated_573008329615@c.us_1757089319606_75ro3wkbm"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:43.309Z",
+          "message": "Trabajan fines de semana?",
+          "result": {
+            "success": true,
+            "phone": "573008329615@c.us",
+            "message": "Trabajan fines de semana?",
+            "name": "Concepción Castro",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573008329615@c.us",
+                "body": "Trabajan fines de semana?",
+                "pushname": "Concepción Castro",
+                "timestamp": 1757089361,
+                "messageId": "simulated_573008329615@c.us_1757089361301_mun5kn180"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:54.413Z",
+          "message": "Buenas tardes",
+          "result": {
+            "success": true,
+            "phone": "573113563833@c.us",
+            "message": "Buenas tardes",
+            "name": "Roberto Silva",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573113563833@c.us",
+                "body": "Buenas tardes",
+                "pushname": "Roberto Silva",
+                "timestamp": 1757089314,
+                "messageId": "simulated_573113563833@c.us_1757089314381_lxmfkqhnd"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:29.167Z",
+          "message": "4",
+          "result": {
+            "success": true,
+            "phone": "573113563833@c.us",
+            "message": "4",
+            "name": "Roberto Silva",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573113563833@c.us",
+                "body": "4",
+                "pushname": "Roberto Silva",
+                "timestamp": 1757089347,
+                "messageId": "simulated_573113563833@c.us_1757089347161_brulpos4l"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:55.253Z",
+          "message": "Información",
+          "result": {
+            "success": true,
+            "phone": "573113563833@c.us",
+            "message": "Información",
+            "name": "Roberto Silva",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573113563833@c.us",
+                "body": "Información",
+                "pushname": "Roberto Silva",
+                "timestamp": 1757089373,
+                "messageId": "simulated_573113563833@c.us_1757089373245_omgnck4h6"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:22:04.963Z",
+          "message": "Hola, buenos días",
+          "result": {
+            "success": true,
+            "phone": "573131297875@c.us",
+            "message": "Hola, buenos días",
+            "name": "Antonia Ortega",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573131297875@c.us",
+                "body": "Hola, buenos días",
+                "pushname": "Antonia Ortega",
+                "timestamp": 1757089322,
+                "messageId": "simulated_573131297875@c.us_1757089322933_lppe2upf2"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:44.713Z",
+          "message": "Quiero cambiar de plan",
+          "result": {
+            "success": true,
+            "phone": "573131297875@c.us",
+            "message": "Quiero cambiar de plan",
+            "name": "Antonia Ortega",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573131297875@c.us",
+                "body": "Quiero cambiar de plan",
+                "pushname": "Antonia Ortega",
+                "timestamp": 1757089362,
+                "messageId": "simulated_573131297875@c.us_1757089362704_2dhoc3qad"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:23:22.450Z",
+          "message": "Consulta sobre mi factura",
+          "result": {
+            "success": true,
+            "phone": "573131297875@c.us",
+            "message": "Consulta sobre mi factura",
+            "name": "Antonia Ortega",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573131297875@c.us",
+                "body": "Consulta sobre mi factura",
+                "pushname": "Antonia Ortega",
+                "timestamp": 1757089400,
+                "messageId": "simulated_573131297875@c.us_1757089400437_99120a47w"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:44.373Z",
+          "message": "Hola, necesito información",
+          "result": {
+            "success": true,
+            "phone": "573164814073@c.us",
+            "message": "Hola, necesito información",
+            "name": "Rafael Ramos",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573164814073@c.us",
+                "body": "Hola, necesito información",
+                "pushname": "Rafael Ramos",
+                "timestamp": 1757089303,
+                "messageId": "simulated_573164814073@c.us_1757089303356_lmrcaju4i"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:17.005Z",
+          "message": "Incluye instalación gratuita?",
+          "result": {
+            "success": true,
+            "phone": "573164814073@c.us",
+            "message": "Incluye instalación gratuita?",
+            "name": "Rafael Ramos",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573164814073@c.us",
+                "body": "Incluye instalación gratuita?",
+                "pushname": "Rafael Ramos",
+                "timestamp": 1757089334,
+                "messageId": "simulated_573164814073@c.us_1757089334998_3ixlk3jvw"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:45.608Z",
+          "message": "Tienen promociones disponibles?",
+          "result": {
+            "success": true,
+            "phone": "573164814073@c.us",
+            "message": "Tienen promociones disponibles?",
+            "name": "Rafael Ramos",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573164814073@c.us",
+                "body": "Tienen promociones disponibles?",
+                "pushname": "Rafael Ramos",
+                "timestamp": 1757089363,
+                "messageId": "simulated_573164814073@c.us_1757089363598_ppboi6qha"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 2,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:22:02.988Z",
+          "message": "Buenas tardes",
+          "result": {
+            "success": true,
+            "phone": "573165905628@c.us",
+            "message": "Buenas tardes",
+            "name": "Francisca Delgado",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573165905628@c.us",
+                "body": "Buenas tardes",
+                "pushname": "Francisca Delgado",
+                "timestamp": 1757089320,
+                "messageId": "simulated_573165905628@c.us_1757089320316_9vosrz3dz"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:29.655Z",
+          "message": "No puedo conectar el WiFi",
+          "result": {
+            "success": true,
+            "phone": "573165905628@c.us",
+            "message": "No puedo conectar el WiFi",
+            "name": "Francisca Delgado",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573165905628@c.us",
+                "body": "No puedo conectar el WiFi",
+                "pushname": "Francisca Delgado",
+                "timestamp": 1757089347,
+                "messageId": "simulated_573165905628@c.us_1757089347648_egvpx9vis"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:56.570Z",
+          "message": "Hola, necesito información",
+          "result": {
+            "success": true,
+            "phone": "573149289761@c.us",
+            "message": "Hola, necesito información",
+            "name": "Fernando Morales",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573149289761@c.us",
+                "body": "Hola, necesito información",
+                "pushname": "Fernando Morales",
+                "timestamp": 1757089316,
+                "messageId": "simulated_573149289761@c.us_1757089316551_o6njolx60"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 2,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:41.615Z",
+          "message": "Saludos",
+          "result": {
+            "success": true,
+            "phone": "573166431793@c.us",
+            "message": "Saludos",
+            "name": "Mercedes Ruiz",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573166431793@c.us",
+                "body": "Saludos",
+                "pushname": "Mercedes Ruiz",
+                "timestamp": 1757089301,
+                "messageId": "simulated_573166431793@c.us_1757089301599_3l8ryjom6"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:12.610Z",
+          "message": "Me parece bien",
+          "result": {
+            "success": true,
+            "phone": "573166431793@c.us",
+            "message": "Me parece bien",
+            "name": "Mercedes Ruiz",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573166431793@c.us",
+                "body": "Me parece bien",
+                "pushname": "Mercedes Ruiz",
+                "timestamp": 1757089330,
+                "messageId": "simulated_573166431793@c.us_1757089330604_1o24zhe03"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 3,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:50.535Z",
+          "message": "Hola, necesito información",
+          "result": {
+            "success": true,
+            "phone": "573142687612@c.us",
+            "message": "Hola, necesito información",
+            "name": "Eduardo Jiménez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573142687612@c.us",
+                "body": "Hola, necesito información",
+                "pushname": "Eduardo Jiménez",
+                "timestamp": 1757089310,
+                "messageId": "simulated_573142687612@c.us_1757089310513_4z2vviv00"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:22:15.617Z",
+          "message": "Entendido",
+          "result": {
+            "success": true,
+            "phone": "573142687612@c.us",
+            "message": "Entendido",
+            "name": "Eduardo Jiménez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573142687612@c.us",
+                "body": "Entendido",
+                "pushname": "Eduardo Jiménez",
+                "timestamp": 1757089333,
+                "messageId": "simulated_573142687612@c.us_1757089333611_qcbvsrxym"
+              }
+            }
+          }
+        },
+        {
+          "timestamp": "2025-09-05T16:23:02.821Z",
+          "message": "Perfecto, gracias",
+          "result": {
+            "success": true,
+            "phone": "573142687612@c.us",
+            "message": "Perfecto, gracias",
+            "name": "Eduardo Jiménez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573142687612@c.us",
+                "body": "Perfecto, gracias",
+                "pushname": "Eduardo Jiménez",
+                "timestamp": 1757089380,
+                "messageId": "simulated_573142687612@c.us_1757089380693_or019656c"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:58.677Z",
+          "message": "Hola, buenos días",
+          "result": {
+            "success": true,
+            "phone": "573129099735@c.us",
+            "message": "Hola, buenos días",
+            "name": "Amparo Castillo",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573129099735@c.us",
+                "body": "Hola, buenos días",
+                "pushname": "Amparo Castillo",
+                "timestamp": 1757089318,
+                "messageId": "simulated_573129099735@c.us_1757089318663_t15nun537"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:51.232Z",
+          "message": "Saludos",
+          "result": {
+            "success": true,
+            "phone": "573118665931@c.us",
+            "message": "Saludos",
+            "name": "Sergio Ibáñez",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573118665931@c.us",
+                "body": "Saludos",
+                "pushname": "Sergio Ibáñez",
+                "timestamp": 1757089311,
+                "messageId": "simulated_573118665931@c.us_1757089311215_4a72bkefl"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "messageCount": 1,
+      "log": [
+        {
+          "timestamp": "2025-09-05T16:21:41.234Z",
+          "message": "Buenas tardes",
+          "result": {
+            "success": true,
+            "phone": "573115959093@c.us",
+            "message": "Buenas tardes",
+            "name": "Remedios Guerrero",
+            "response": {
+              "success": true,
+              "message": "Mensaje simulado procesado exitosamente",
+              "data": {
+                "from": "573115959093@c.us",
+                "body": "Buenas tardes",
+                "pushname": "Remedios Guerrero",
+                "timestamp": 1757089301,
+                "messageId": "simulated_573115959093@c.us_1757089301172_3qalus1ba"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

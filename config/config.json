@@ -1,0 +1,41 @@
+{
+  "name": "ChatBot Asistente",
+  "port": 5000,
+  "log_level": "INFO",
+  "max_restarts": 10,
+  "restart_delay": 5,
+  "responses": {
+    "greeting": [
+      "¡Hola! ¿En qué puedo ayudarte hoy?",
+      "¡Bienvenido! Estoy aquí para asistirte.",
+      "¡Hola! ¿Cómo puedo ser de ayuda?",
+      "¡Saludos! ¿Qué necesitas?"
+    ],
+    "goodbye": [
+      "¡Hasta luego! Que tengas un excelente día.",
+      "¡Nos vemos! Siempre estaré aquí cuando me necesites.",
+      "¡Adiós! Ha sido un placer ayudarte.",
+      "¡Hasta la próxima! Cuidate mucho."
+    ],
+    "default": "Lo siento, no entiendo completamente tu consulta. ¿Podrías ser más específico o reformular tu pregunta?",
+    "help": "¡Hola! Soy tu asistente chatbot. Puedo ayudarte con:\n- Saludarte y despedirme\n- Responder preguntas generales\n- Verificar mi estado de funcionamiento\n- Proporcionar información básica\n\n¿En qué te gustaría que te ayude?",
+    "status": "✅ Estoy funcionando perfectamente y listo para ayudarte en lo que necesites.",
+    "error": "Disculpa, he experimentado un pequeño problema. Por favor, inténtalo de nuevo en unos momentos.",
+    "thinking": "Déjame pensar un momento...",
+    "unknown_command": "No reconozco ese comando. Puedes escribir 'ayuda' para ver qué puedo hacer por ti."
+  },
+  "keywords": {
+    "greetings": ["hola", "hello", "hi", "buenos dias", "buenas tardes", "buenas noches", "saludos", "que tal"],
+    "goodbyes": ["adios", "bye", "hasta luego", "nos vemos", "chao", "hasta la vista", "me voy"],
+    "help": ["ayuda", "help", "que puedes hacer", "comandos", "opciones", "asistencia"],
+    "status": ["estado", "status", "como estas", "funciona", "funcionando", "disponible"]
+  },
+  "features": {
+    "auto_restart": true,
+    "health_monitoring": true,
+    "log_rotation": true,
+    "graceful_shutdown": true,
+    "interactive_mode": true,
+    "api_mode": true
+  }
+}

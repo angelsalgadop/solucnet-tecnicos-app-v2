@@ -1,0 +1,205 @@
+{
+  "fecha_reporte": "2025-10-09T15:49:21.508Z",
+  "fecha_reporte_legible": "9/10/2025, 10:49:21 a. m.",
+  "total_clientes": 16,
+  "deuda_total": "00174100.0084507.0069326.0072200.0069326.00065000.0065000.0078380.00100260.0086400.0087520.0078380.00104960.00068380.0089840.0068380.00",
+  "bases_datos": [
+    {
+      "nombre": "BD Principal (50)",
+      "host": "192.168.99.50",
+      "cantidad_clientes": 5,
+      "clientes": [
+        {
+          "id": 349,
+          "nombre": "JADER JOAQUIN MENDOZA RODRIGUEZ ",
+          "cedula": "1077467480",
+          "telefono": "3137419318,3148091583",
+          "dias_moroso": 222,
+          "meses_moroso": 7,
+          "primera_factura_vencida": "2025-03-01T05:00:00.000Z",
+          "deuda_total": "174100.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 350,
+          "nombre": "LAURA VANESSA GOMEZ ALCARAZ",
+          "cedula": "1027958555",
+          "telefono": "3219998019",
+          "dias_moroso": 116,
+          "meses_moroso": 3,
+          "primera_factura_vencida": "2025-06-15T05:00:00.000Z",
+          "deuda_total": "84507.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 343,
+          "nombre": "SERGIO ANDRES VELASCO VICHE",
+          "cedula": "1001031894",
+          "telefono": "3137775388",
+          "dias_moroso": 69,
+          "meses_moroso": 2,
+          "primera_factura_vencida": "2025-08-01T05:00:00.000Z",
+          "deuda_total": "69326.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 47,
+          "nombre": "LUZ ESTERLLY TORDECILLA GUERRA",
+          "cedula": "39428729",
+          "telefono": "3146062646",
+          "dias_moroso": 38,
+          "meses_moroso": 1,
+          "primera_factura_vencida": "2025-09-01T05:00:00.000Z",
+          "deuda_total": "72200.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 275,
+          "nombre": "ALBA ROSA ZAPATA AMAYA",
+          "cedula": "32252463",
+          "telefono": "3142658852",
+          "dias_moroso": 38,
+          "meses_moroso": 1,
+          "primera_factura_vencida": "2025-09-01T05:00:00.000Z",
+          "deuda_total": "69326.00",
+          "facturas_pendientes": 1
+        }
+      ]
+    },
+    {
+      "nombre": "BD Secundaria (11)",
+      "host": "192.168.99.11",
+      "cantidad_clientes": 8,
+      "clientes": [
+        {
+          "id": 294,
+          "nombre": "FERNANDO JOSE LOPEZ HERNANDEZ",
+          "cedula": "1007722627",
+          "telefono": "3103857678",
+          "dias_moroso": 526,
+          "meses_moroso": 17,
+          "primera_factura_vencida": "2024-05-01T05:00:00.000Z",
+          "deuda_total": "65000.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 229,
+          "nombre": "DARVER ALEIL HERRERA SANTANA",
+          "cedula": "1103215321",
+          "telefono": "3022583048",
+          "dias_moroso": 281,
+          "meses_moroso": 9,
+          "primera_factura_vencida": "2025-01-01T05:00:00.000Z",
+          "deuda_total": "65000.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 248,
+          "nombre": "ADRIANA AILIN GONSALEZ",
+          "cedula": "1028039460",
+          "telefono": "3103268727",
+          "dias_moroso": 177,
+          "meses_moroso": 5,
+          "primera_factura_vencida": "2025-04-15T05:00:00.000Z",
+          "deuda_total": "78380.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 247,
+          "nombre": "DAUFE DELGADO ROCHA",
+          "cedula": "71240850",
+          "telefono": "3136988573",
+          "dias_moroso": 161,
+          "meses_moroso": 5,
+          "primera_factura_vencida": "2025-05-01T05:00:00.000Z",
+          "deuda_total": "100260.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 231,
+          "nombre": "JHOAN ENRIQUE JIMENEZ LOPEZ",
+          "cedula": "1001032063",
+          "telefono": "3169477381",
+          "dias_moroso": 130,
+          "meses_moroso": 4,
+          "primera_factura_vencida": "2025-06-01T05:00:00.000Z",
+          "deuda_total": "86400.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 253,
+          "nombre": "MARIA LUISA MADERA GOMEZ",
+          "cedula": "1001154157",
+          "telefono": "3135708146",
+          "dias_moroso": 116,
+          "meses_moroso": 3,
+          "primera_factura_vencida": "2025-06-15T05:00:00.000Z",
+          "deuda_total": "87520.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 428,
+          "nombre": "OSNEIDER ELIAS ANGULO CONDE",
+          "cedula": "1028018645",
+          "telefono": "3114046703",
+          "dias_moroso": 38,
+          "meses_moroso": 1,
+          "primera_factura_vencida": "2025-09-01T05:00:00.000Z",
+          "deuda_total": "78380.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 438,
+          "nombre": "DALMARIS MUENTE",
+          "cedula": "1027943563",
+          "telefono": "3106229718",
+          "dias_moroso": 38,
+          "meses_moroso": 1,
+          "primera_factura_vencida": "2025-09-01T05:00:00.000Z",
+          "deuda_total": "104960.00",
+          "facturas_pendientes": 1
+        }
+      ]
+    },
+    {
+      "nombre": "BD Terciaria (2)",
+      "host": "192.168.99.2",
+      "cantidad_clientes": 3,
+      "clientes": [
+        {
+          "id": 11,
+          "nombre": "MARIA EUSTOLIA SUAREZ RODRIGUEZ",
+          "cedula": "39155636",
+          "telefono": "3205337628",
+          "dias_moroso": 208,
+          "meses_moroso": 6,
+          "primera_factura_vencida": "2025-03-15T05:00:00.000Z",
+          "deuda_total": "68380.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 60,
+          "nombre": "LUISA FERNANDA VELEZ MONTES ",
+          "cedula": "1028013450",
+          "telefono": "3234341418",
+          "dias_moroso": 208,
+          "meses_moroso": 6,
+          "primera_factura_vencida": "2025-03-15T05:00:00.000Z",
+          "deuda_total": "89840.00",
+          "facturas_pendientes": 1
+        },
+        {
+          "id": 68,
+          "nombre": "JOSE MIGUEL NOVOA PAEZ",
+          "cedula": "71980940",
+          "telefono": "3226103419",
+          "dias_moroso": 191,
+          "meses_moroso": 6,
+          "primera_factura_vencida": "2025-04-01T05:00:00.000Z",
+          "deuda_total": "68380.00",
+          "facturas_pendientes": 1
+        }
+      ]
+    }
+  ]
+}

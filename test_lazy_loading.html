@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Lazy Loading</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #messages-area { 
+            border: 1px solid #ccc; 
+            height: 400px; 
+            padding: 20px; 
+            background: #f9f9f9; 
+            margin: 20px 0;
+            overflow-y: auto;
+        }
+        button { 
+            padding: 10px 20px; 
+            margin: 5px; 
+            border: none; 
+            background: #007bff; 
+            color: white; 
+            cursor: pointer; 
+            border-radius: 5px;
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        :root {
+            --primary-color: #00d4aa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Lazy Loading Implementation</h1>
+        <p>This tests the lazy loading indicator functions.</p>
+        
+        <button onclick="testShowLazyIndicator()">Show Lazy Loading Indicator</button>
+        <button onclick="testHideLazyIndicator()">Hide Lazy Loading Indicator</button>
+        <button onclick="testCompleteFlow()">Test Complete Flow</button>
+        
+        <div id="messages-area">
+            <p>Messages will appear here...</p>
+        </div>
+        
+        <div id="log"></div>
+    </div>
+
+    <script>
+        // Copy the lazy loading functions from the main file
+        function showLazyLoadingIndicator() {
+            const messagesArea = document.getElementById('messages-area');
+            if (!messagesArea) return;
+
+            // Clear existing content
+            messagesArea.innerHTML = '';
+            
+            // Create lazy loading indicator
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.id = 'lazy-loading-indicator';
+            loadingIndicator.style.cssText = `
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                color: #8b949e;
+                font-size: 0.9em;
+                text-align: center;
+                animation: fadeIn 0.3s ease;
+            `;
+            
+            loadingIndicator.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <i class="fas fa-comment-dots" style="font-size: 2.5em; color: var(--primary-color); animation: pulse 1.5s ease-in-out infinite;"></i>
+                </div>
+                <div style="font-weight: 500; margin-bottom: 5px;">Cargando mensajes...</div>
+                <div style="font-size: 0.8em; color: #adb5bd;">Obteniendo historial del chat</div>
+                
+                <style>
+                    @keyframes pulse {
+                        0% { opacity: 0.6; transform: scale(1); }
+                        50% { opacity: 1; transform: scale(1.05); }
+                        100% { opacity: 0.6; transform: scale(1); }
+                    }
+                    
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translateY(20px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                </style>
+            `;
+            
+            messagesArea.appendChild(loadingIndicator);
+            log('✅ Lazy loading indicator shown');
+        }
+
+        function hideLazyLoadingIndicator() {
+            const indicator = document.getElementById('lazy-loading-indicator');
+            if (indicator) {
+                indicator.style.opacity = '0';
+                indicator.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    indicator.remove();
+                    log('✅ Lazy loading indicator hidden');
+                }, 300);
+            } else {
+                log('⚠️ No lazy loading indicator found to hide');
+            }
+        }
+        
+        function displayMessages(messages) {
+            const messagesArea = document.getElementById('messages-area');
+            
+            // Hide lazy loading indicator first
+            hideLazyLoadingIndicator();
+            
+            // Display mock messages
+            messagesArea.innerHTML = messages.map(msg => 
+                `<div style="margin: 10px 0; padding: 10px; background: ${msg.fromMe ? '#dcf8c6' : 'white'}; border-radius: 8px;">
+                    <strong>${msg.fromMe ? 'You' : 'Contact'}:</strong> ${msg.body}
+                    <div style="font-size: 0.8em; color: #666; margin-top: 5px;">${new Date(msg.timestamp).toLocaleTimeString()}</div>
+                </div>`
+            ).join('');
+            
+            log(`✅ Displayed ${messages.length} messages`);
+        }
+        
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += `<div style="margin: 5px 0; padding: 5px; background: #f0f0f0; border-radius: 3px; font-family: monospace; font-size: 0.9em;">${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        // Test functions
+        function testShowLazyIndicator() {
+            log('🧪 Testing showLazyLoadingIndicator()');
+            showLazyLoadingIndicator();
+        }
+        
+        function testHideLazyIndicator() {
+            log('🧪 Testing hideLazyLoadingIndicator()');
+            hideLazyLoadingIndicator();
+        }
+        
+        function testCompleteFlow() {
+            log('🧪 Testing complete lazy loading flow');
+            
+            // Step 1: Show lazy loading
+            showLazyLoadingIndicator();
+            
+            // Step 2: Simulate message loading after delay
+            setTimeout(() => {
+                const mockMessages = [
+                    { fromMe: false, body: 'Hola, ¿cómo estás?', timestamp: Date.now() - 10000 },
+                    { fromMe: true, body: 'Muy bien, gracias. ¿Y tú?', timestamp: Date.now() - 5000 },
+                    { fromMe: false, body: 'Excelente, trabajando en algunos proyectos nuevos', timestamp: Date.now() - 2000 }
+                ];
+                
+                log('📱 Simulating message load...');
+                displayMessages(mockMessages);
+            }, 2000);
+        }
+        
+        // Initialize
+        log('🚀 Test environment initialized');
+    </script>
+</body>
+</html>

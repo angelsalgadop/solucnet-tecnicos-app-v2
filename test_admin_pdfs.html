@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Admin PDFs</title>
+    <script>
+        async function probarCrearCliente() {
+            const formData = new FormData();
+
+            // Datos del cliente
+            formData.append('cliente_nombre', 'Cliente Prueba PDF');
+            formData.append('cliente_cedula', '12345678-9');
+            formData.append('cliente_telefono', '5551234567');
+            formData.append('cliente_direccion', 'Calle de prueba 123');
+            formData.append('motivo_visita', 'Instalación de servicio');
+            formData.append('fecha_programada', '2025-09-26');
+            formData.append('notas_admin', 'Visita de prueba con PDF');
+
+            // Crear un archivo PDF simulado para prueba
+            const pdfContent = 'Contenido PDF de prueba';
+            const blob = new Blob([pdfContent], { type: 'application/pdf' });
+            const file = new File([blob], 'manual_instalacion.pdf', { type: 'application/pdf' });
+            formData.append('archivos_pdf', file);
+
+            try {
+                const response = await fetch('/api/crear-cliente-y-visita', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const resultado = await response.json();
+                console.log('Resultado:', resultado);
+                document.getElementById('resultado').innerHTML = JSON.stringify(resultado, null, 2);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('resultado').innerHTML = 'Error: ' + error.message;
+            }
+        }
+
+        async function probarObtenerPdfs(visitaId) {
+            try {
+                const response = await fetch(`/api/visitas/${visitaId}/archivos-pdf`);
+                const resultado = await response.json();
+                console.log('PDFs:', resultado);
+                document.getElementById('pdfs').innerHTML = JSON.stringify(resultado, null, 2);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('pdfs').innerHTML = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Prueba Admin PDFs</h1>
+    <button onclick="probarCrearCliente()">Crear Cliente con PDF</button>
+    <br><br>
+    <label>ID de visita: <input type="number" id="visitaId" value="1"></label>
+    <button onclick="probarObtenerPdfs(document.getElementById('visitaId').value)">Obtener PDFs</button>
+
+    <h2>Resultado:</h2>
+    <pre id="resultado"></pre>
+
+    <h2>PDFs:</h2>
+    <pre id="pdfs"></pre>
+</body>
+</html>

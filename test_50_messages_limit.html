@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test: Límite de 50 Mensajes</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f0f2f5;
+        }
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .chat-btn {
+            padding: 12px 20px;
+            border: none;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            margin: 5px;
+        }
+        .chat-btn:hover {
+            background: #0056b3;
+        }
+        .chat-btn.active {
+            background: #00d4aa;
+        }
+        .danger-btn {
+            background: #dc3545;
+        }
+        .danger-btn:hover {
+            background: #c82333;
+        }
+        .warning-btn {
+            background: #ffc107;
+            color: #212529;
+        }
+        .warning-btn:hover {
+            background: #e0a800;
+        }
+        #messages-area { 
+            border: 1px solid #ddd; 
+            height: 400px; 
+            padding: 15px; 
+            background: #fafafa; 
+            margin: 15px 0;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+        #counter {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+        }
+        #log {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 11px;
+            border: 1px solid #dee2e6;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success {
+            background: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        .message.outgoing {
+            background: #dcf8c6;
+            border: 1px solid #c9e7a3;
+            margin-left: 20%;
+        }
+        .message.incoming {
+            background: white;
+            border: 1px solid #e9ecef;
+            margin-right: 20%;
+        }
+        .message-number {
+            font-weight: bold;
+            color: #666;
+            font-size: 11px;
+        }
+        .message-time {
+            font-size: 10px;
+            color: #999;
+            text-align: right;
+            margin-top: 3px;
+        }
+        :root {
+            --primary-color: #00d4aa;
+        }
+        h1 { color: #333; }
+        h3 { color: #666; margin-top: 25px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-limit"></i> Test: Límite de 50 Mensajes por Chat</h1>
+        
+        <div class="highlight">
+            <strong>🎯 Objetivo:</strong> Demostrar que el sistema carga <strong>EXACTAMENTE 50 mensajes</strong> por chat, 
+            sin importar cuántos mensajes tenga el chat completo.
+        </div>
+
+        <div class="test-section">
+            <h3>📱 Chats de Prueba</h3>
+            <p>Cada chat simula tener diferentes cantidades de mensajes:</p>
+            <button class="chat-btn" onclick="loadChat('chat_25', 25)">Chat con 25 mensajes</button>
+            <button class="chat-btn" onclick="loadChat('chat_50', 50)">Chat con 50 mensajes</button>
+            <button class="chat-btn warning-btn" onclick="loadChat('chat_75', 75)">Chat con 75 mensajes ⚠️</button>
+            <button class="chat-btn warning-btn" onclick="loadChat('chat_100', 100)">Chat con 100 mensajes ⚠️</button>
+            <button class="chat-btn danger-btn" onclick="loadChat('chat_200', 200)">Chat con 200 mensajes ❌</button>
+            <br><br>
+            <button class="chat-btn danger-btn" onclick="clearTest()">Limpiar Test</button>
+        </div>
+
+        <div id="counter">
+            📊 Mensajes Mostrados: 0 / Límite: 50
+        </div>
+
+        <div class="success" id="result-message" style="display: none;">
+            <strong>✅ RESULTADO:</strong> <span id="result-text"></span>
+        </div>
+
+        <h3>📱 Mensajes del Chat</h3>
+        <div id="messages-area">Selecciona un chat para probar el límite de 50 mensajes</div>
+
+        <h3>📋 Log de Pruebas</h3>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        let currentChatId = null;
+
+        // Función que simula la lógica de límite de 50 mensajes (igual que en el código real)
+        function displayMessages(messages) {
+            const messagesArea = document.getElementById('messages-area');
+            
+            if (!messages || messages.length === 0) {
+                messagesArea.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No hay mensajes</div>';
+                updateCounter(0);
+                return;
+            }
+
+            // ⭐ LÓGICA CLAVE: Limitar a máximo 50 mensajes por chat (igual que en el código real)
+            const limitedMessages = messages.length > 50 ? messages.slice(-50) : messages;
+            
+            // Ordenar por timestamp
+            const sortedMessages = [...limitedMessages].sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+            if (messages.length > 50) {
+                log(`⚠️ LÍMITE APLICADO: ${messages.length} mensajes → 50 (mostrando los últimos 50)`);
+            } else {
+                log(`✅ Sin límite necesario: ${messages.length} mensajes (menor a 50)`);
+            }
+
+            // Mostrar mensajes limitados
+            messagesArea.innerHTML = sortedMessages.map((msg, index) => 
+                `<div class="message ${msg.fromMe ? 'outgoing' : 'incoming'}">
+                    <div class="message-number">#${msg.originalNumber || index + 1} ${msg.fromMe ? '(Tú)' : '(Contacto)'}</div>
+                    <div>${msg.body}</div>
+                    <div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>
+                </div>`
+            ).join('');
+
+            updateCounter(sortedMessages.length);
+            showResult(messages.length, sortedMessages.length);
+        }
+
+        function loadChat(chatId, totalMessages) {
+            currentChatId = chatId;
+            
+            // Actualizar botones
+            document.querySelectorAll('.chat-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            log(`🔄 Cargando chat: ${chatId} (${totalMessages} mensajes totales)`);
+
+            // Simular loading
+            const messagesArea = document.getElementById('messages-area');
+            messagesArea.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #8b949e;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2em; color: var(--primary-color); margin-bottom: 15px;"></i>
+                    <div>Cargando ${totalMessages} mensajes...</div>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Aplicando límite de 50 mensajes</div>
+                </div>
+            `;
+
+            // Generar mensajes simulados
+            setTimeout(() => {
+                const messages = generateMockMessages(totalMessages);
+                displayMessages(messages);
+            }, 1000);
+        }
+
+        function generateMockMessages(count) {
+            const messages = [];
+            const baseTime = Date.now() - (count * 60000); // 1 minuto entre mensajes
+            
+            for (let i = 1; i <= count; i++) {
+                messages.push({
+                    id: `msg_${i}`,
+                    body: `Mensaje número ${i} de ${count}`,
+                    fromMe: i % 3 === 0, // Cada 3er mensaje es nuestro
+                    timestamp: baseTime + (i * 60000),
+                    originalNumber: i // Para mostrar el número original
+                });
+            }
+            
+            return messages;
+        }
+
+        function updateCounter(displayedCount) {
+            const counter = document.getElementById('counter');
+            const isOverLimit = displayedCount === 50;
+            
+            counter.innerHTML = `📊 Mensajes Mostrados: <span style="font-size: 1.2em; color: ${isOverLimit ? '#dc3545' : '#28a745'};">${displayedCount}</span> / Límite: 50`;
+            
+            if (isOverLimit) {
+                counter.style.borderColor = '#dc3545';
+                counter.style.backgroundColor = '#f8d7da';
+                counter.innerHTML += ' <span style="color: #dc3545;">⚠️ LÍMITE ALCANZADO</span>';
+            } else {
+                counter.style.borderColor = '#28a745';
+                counter.style.backgroundColor = '#d4edda';
+            }
+        }
+
+        function showResult(original, displayed) {
+            const resultDiv = document.getElementById('result-message');
+            const resultText = document.getElementById('result-text');
+            
+            if (original > 50) {
+                resultText.innerHTML = `El chat tenía ${original} mensajes, pero se mostraron solo ${displayed} (límite aplicado correctamente)`;
+                resultDiv.className = 'success';
+            } else {
+                resultText.innerHTML = `El chat tenía ${original} mensajes y se mostraron todos los ${displayed} (no se necesitó límite)`;
+                resultDiv.className = 'success';
+            }
+            
+            resultDiv.style.display = 'block';
+            
+            // Auto-hide después de 5 segundos
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function clearTest() {
+            document.getElementById('messages-area').innerHTML = 'Selecciona un chat para probar el límite de 50 mensajes';
+            document.getElementById('result-message').style.display = 'none';
+            updateCounter(0);
+            document.querySelectorAll('.chat-btn').forEach(btn => btn.classList.remove('active'));
+            log('🧹 Test limpiado');
+        }
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const isImportant = message.includes('LÍMITE APLICADO') || message.includes('Sin límite necesario');
+            const color = message.includes('LÍMITE APLICADO') ? '#dc3545' : message.includes('Sin límite necesario') ? '#28a745' : '#007bff';
+            
+            logDiv.innerHTML += `<div style="margin: 3px 0; padding: 5px; border-left: 3px solid ${color}; padding-left: 8px; ${isImportant ? 'font-weight: bold;' : ''}">
+                <span style="color: #666; font-size: 10px;">[${timestamp}]</span> ${message}
+            </div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // Inicialización
+        log('🚀 Sistema de límite de 50 mensajes inicializado');
+        log('💡 Prueba diferentes chats para ver cómo se aplica el límite');
+        updateCounter(0);
+    </script>
+</body>
+</html>

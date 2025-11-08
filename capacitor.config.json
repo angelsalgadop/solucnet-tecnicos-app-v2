@@ -1,0 +1,40 @@
+{
+  "appId": "com.solucnet.tecnicos",
+  "appName": "SolucNet Técnicos",
+  "webDir": "public",
+  "server": {
+    "url": "https://cliente.solucnet.com:3000",
+    "cleartext": true,
+    "allowNavigation": [
+      "cliente.solucnet.com",
+      "*.solucnet.com"
+    ]
+  },
+  "android": {
+    "buildOptions": {
+      "keystorePath": "android/release.keystore",
+      "keystoreAlias": "solucnet-key"
+    },
+    "allowMixedContent": true,
+    "backgroundColor": "#28a745"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#28a745",
+      "showSpinner": true,
+      "androidSpinnerStyle": "large",
+      "spinnerColor": "#ffffff"
+    },
+    "Camera": {
+      "saveToGallery": true,
+      "quality": 90
+    },
+    "Geolocation": {
+      "locationAccuracy": "high"
+    },
+    "Network": {
+      "notifyConnectionChanged": true
+    }
+  }
+}

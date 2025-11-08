@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Test de Optimización para Tablets</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Simular los estilos principales aplicados */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        :root {
+            --primary-color: #00d4aa;
+            --sidebar-width-tablet: 280px;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width-tablet);
+            background: #2a2f3a;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Chat Area - Estilos optimizados */
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            max-width: 100%;
+            width: auto;
+            overflow-x: auto;
+            flex: 1;
+        }
+
+        .chat-header {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #e1e8ed;
+            flex-shrink: 0;
+        }
+
+        /* Messages Area - Estilos optimizados */
+        .messages-area {
+            flex: 1;
+            padding: 15px 10px 90px 10px;
+            overflow-y: auto;
+            background: #f0f2f5;
+            min-height: 0;
+            max-width: 100%;
+            width: auto;
+            overflow-x: auto;
+            will-change: scroll-position;
+            contain: layout style paint;
+            scroll-behavior: smooth;
+            scroll-padding-bottom: 90px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Message Input Area - Optimizada */
+        .message-input-area {
+            position: fixed;
+            bottom: 0;
+            left: var(--sidebar-width-tablet);
+            right: 0;
+            width: auto;
+            padding: 10px 15px;
+            background: white;
+            border-top: 1px solid #e1e8ed;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .message-input-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #e1e8ed;
+            border-radius: 20px;
+            font-size: 1rem;
+            outline: none;
+            resize: none;
+            max-height: 120px;
+            min-height: 45px;
+            line-height: 1.4;
+            font-family: inherit;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .message-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.2);
+        }
+
+        .send-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            min-width: 45px;
+            min-height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.outgoing {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 85%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            word-wrap: break-word;
+        }
+
+        .message.incoming .message-content {
+            background: white;
+            border: 1px solid #e1e8ed;
+            margin-right: 20px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .message.outgoing .message-content {
+            background: var(--primary-color);
+            color: white;
+            margin-left: 20px;
+        }
+
+        .test-controls {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 9999;
+            display: flex;
+            gap: 10px;
+        }
+
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Media Queries para Tablets */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .chat-area {
+                font-size: 0.95rem;
+                height: auto;
+                max-width: 100%;
+            }
+            
+            .messages-area {
+                padding: 15px 12px 80px 12px;
+                font-size: 0.95rem;
+                height: auto;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+            
+            .message-content {
+                max-width: 85%;
+                font-size: 0.9rem;
+            }
+            
+            .message-input-container {
+                padding: 10px 15px;
+                bottom: 0;
+                position: relative;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .message-input {
+                font-size: 1rem;
+                padding: 12px 15px;
+                min-height: 45px;
+                max-height: 120px;
+            }
+            
+            .messages-area {
+                scroll-padding-bottom: 100px;
+                scroll-behavior: smooth;
+            }
+            
+            .send-btn {
+                min-width: 45px;
+                min-height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Responsive para pantallas más pequeñas */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: absolute;
+                height: 100%;
+                z-index: 1000;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .chat-area {
+                width: 100%;
+            }
+
+            .message-input-area {
+                left: 0;
+            }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            margin: 10px;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-controls">
+        <button class="test-btn" onclick="addMessage()">Agregar Mensaje</button>
+        <button class="test-btn" onclick="scrollToBottom()">Scroll al Final</button>
+        <button class="test-btn" onclick="clearMessages()">Limpiar</button>
+        <button class="test-btn" onclick="simulateTyping()">Simular Escritura</button>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <h3>Panel Lateral</h3>
+            <div class="highlight">
+                <strong>🎯 Optimizaciones para Tablets:</strong>
+                <ul style="margin: 10px 0 0 20px; font-size: 0.85em;">
+                    <li>Meta viewport con maximum-scale=1</li>
+                    <li>Contenedores flexibles con max-width: 100%</li>
+                    <li>Media queries específicas (768px-1024px)</li>
+                    <li>Barra de texto optimizada</li>
+                    <li>Scroll mejorado con padding-bottom</li>
+                    <li>Touch-action optimizado</li>
+                    <li>-webkit-overflow-scrolling: touch</li>
+                </ul>
+            </div>
+            <div style="margin-top: 20px;">
+                <strong>📊 Dimensiones actuales:</strong><br>
+                <span id="dimensions">-</span>
+            </div>
+        </div>
+
+        <div class="chat-area">
+            <div class="chat-header">
+                <h3>Chat de Prueba para Tablet</h3>
+                <small>Prueba el scroll y la visibilidad del último mensaje</small>
+            </div>
+
+            <div class="messages-area" id="messages">
+                <div class="message incoming">
+                    <div class="message-content">
+                        ¡Hola! Esta es una prueba de la optimización para tablets. Intenta escribir un mensaje en la barra de abajo.
+                    </div>
+                </div>
+                <div class="message outgoing">
+                    <div class="message-content">
+                        ¡Perfecto! Ahora puedo ver mejor los mensajes en mi tablet.
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-input-area">
+                <div class="message-input-container">
+                    <textarea class="message-input" id="messageInput" placeholder="Escribe un mensaje..." rows="1"></textarea>
+                    <button class="send-btn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let messageCount = 0;
+
+        function updateDimensions() {
+            const dims = document.getElementById('dimensions');
+            dims.innerHTML = `
+                Ventana: ${window.innerWidth}x${window.innerHeight}px<br>
+                Tipo: ${getDeviceType()}
+            `;
+        }
+
+        function getDeviceType() {
+            const width = window.innerWidth;
+            if (width <= 767) return '📱 Móvil';
+            if (width <= 1024) return '📱 Tablet';
+            return '💻 Desktop';
+        }
+
+        function addMessage() {
+            messageCount++;
+            const messagesArea = document.getElementById('messages');
+            const isOutgoing = messageCount % 2 === 0;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOutgoing ? 'outgoing' : 'incoming'}`;
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    Mensaje de prueba #${messageCount} - ${isOutgoing ? 'Enviado' : 'Recibido'} a las ${new Date().toLocaleTimeString()}
+                </div>
+            `;
+            
+            messagesArea.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            const messagesArea = document.getElementById('messages');
+            messagesArea.scrollTo({
+                top: messagesArea.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function clearMessages() {
+            const messagesArea = document.getElementById('messages');
+            messagesArea.innerHTML = `
+                <div class="message incoming">
+                    <div class="message-content">
+                        Mensajes limpiados. ¡Comienza una nueva conversación!
+                    </div>
+                </div>
+            `;
+            messageCount = 0;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            if (input.value.trim()) {
+                messageCount++;
+                const messagesArea = document.getElementById('messages');
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message outgoing';
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        ${input.value}
+                    </div>
+                `;
+                
+                messagesArea.appendChild(messageDiv);
+                input.value = '';
+                scrollToBottom();
+            }
+        }
+
+        function simulateTyping() {
+            const input = document.getElementById('messageInput');
+            const messages = [
+                "Esta es una prueba de escritura",
+                "¡La barra de texto funciona genial en tablet!",
+                "Ahora puedo ver el último mensaje correctamente",
+                "Las optimizaciones están funcionando"
+            ];
+            
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < messages.length) {
+                    input.value = messages[i];
+                    input.focus();
+                    i++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1000);
+        }
+
+        // Auto-resize textarea
+        document.getElementById('messageInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Send message on Enter (but not Shift+Enter)
+        document.getElementById('messageInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Update dimensions on resize
+        window.addEventListener('resize', updateDimensions);
+        updateDimensions();
+
+        // Simular algunos mensajes iniciales
+        setTimeout(() => {
+            for (let i = 0; i < 10; i++) {
+                addMessage();
+            }
+        }, 500);
+    </script>
+</body>
+</html>
