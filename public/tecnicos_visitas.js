@@ -1139,32 +1139,52 @@ async function guardarReporteVisita() {
             console.log('❌ Error de conexión, guardando reporte OFFLINE:', fetchError.message);
 
             // Guardar reporte offline usando offline-manager
-            if (typeof window.offlineManager !== 'undefined' && window.offlineManager.guardarReporteOffline) {
-                const reporteOffline = {
-                    ...formData,
-                    fotos: fotosSeleccionadas,
-                    serial_equipo: window.serialEquipoCapturado,
-                    tipo_equipo: window.tipoEquipoCapturado,
-                    timestamp: Date.now()
-                };
+            if (typeof window.offlineManager !== 'undefined' && typeof window.offlineManager.guardarReporteOffline === 'function') {
+                try {
+                    const reporteOffline = {
+                        ...formData,
+                        fotos: fotosSeleccionadas,
+                        serial_equipo: window.serialEquipoCapturado,
+                        tipo_equipo: window.tipoEquipoCapturado,
+                        timestamp: Date.now()
+                    };
 
-                await window.offlineManager.guardarReporteOffline(reporteOffline);
+                    console.log('📴 [GUARDAR REPORTE] Intentando guardar offline...', reporteOffline);
+                    const resultado = await window.offlineManager.guardarReporteOffline(reporteOffline);
 
-                mostrarAlerta('📴 Sin conexión. Reporte guardado OFFLINE. Se sincronizará automáticamente cuando haya conexión.', 'warning');
+                    if (resultado && resultado.success) {
+                        console.log(`✅ [GUARDAR REPORTE] Reporte guardado offline con ID: ${resultado.localId}`);
+                        mostrarAlerta(`📴 Sin conexión. Reporte guardado OFFLINE (ID: ${resultado.localId}). Se sincronizará automáticamente cuando haya conexión.`, 'warning');
 
-                // Limpiar serial y tipo capturado
-                window.serialEquipoCapturado = null;
-                window.tipoEquipoCapturado = null;
+                        // Limpiar serial y tipo capturado
+                        window.serialEquipoCapturado = null;
+                        window.tipoEquipoCapturado = null;
 
-                // Remover la visita de la lista local
-                visitasAsignadas = visitasAsignadas.filter(v => v.id != formData.visita_id);
-                mostrarVisitasAsignadas();
+                        // Limpiar fotos seleccionadas
+                        fotosSeleccionadas = [];
 
-                // Cerrar modal
-                bootstrap.Modal.getInstance(document.getElementById('modalCompletarVisita')).hide();
+                        // Remover la visita de la lista local
+                        visitasAsignadas = visitasAsignadas.filter(v => v.id != formData.visita_id);
+                        mostrarVisitasAsignadas();
+
+                        // Cerrar modal
+                        bootstrap.Modal.getInstance(document.getElementById('modalCompletarVisita')).hide();
+                    } else {
+                        const errorMsg = resultado?.message || 'Error desconocido';
+                        console.error('❌ [GUARDAR REPORTE] Error guardando offline:', errorMsg);
+                        mostrarAlerta(`❌ Error guardando offline: ${errorMsg}. Por favor, verifica tu conexión e intenta de nuevo.`, 'danger');
+                    }
+                } catch (offlineError) {
+                    console.error('❌ [GUARDAR REPORTE] Excepción guardando offline:', offlineError);
+                    mostrarAlerta(`❌ Error crítico guardando offline: ${offlineError.message}. Por favor, verifica tu conexión e intenta de nuevo.`, 'danger');
+                }
             } else {
                 // Si offline-manager no está disponible, mostrar error
-                mostrarAlerta('❌ No hay conexión y el sistema offline no está disponible. Por favor, verifica tu conexión e intenta de nuevo.', 'danger');
+                console.error('❌ [GUARDAR REPORTE] Offline manager no disponible:', {
+                    offlineManagerExists: typeof window.offlineManager !== 'undefined',
+                    methodExists: typeof window.offlineManager?.guardarReporteOffline === 'function'
+                });
+                mostrarAlerta('❌ No hay conexión y el sistema offline no está disponible. Por favor, recarga la aplicación e intenta de nuevo.', 'danger');
             }
         }
 

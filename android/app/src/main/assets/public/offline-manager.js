@@ -18,15 +18,20 @@ class OfflineManager {
         this.isOnline = navigator.onLine;
         this.pendingRequests = [];
         this.syncInProgress = false;
+        this.isReady = false;
 
-        this.init();
+        // Crear promesa que se resolverá cuando init() termine
+        this.ready = this.init();
     }
 
     // Inicializar el sistema offline
     async init() {
         try {
+            console.log('🔄 [OFFLINE MANAGER] Inicializando...');
+
             // Abrir IndexedDB
             this.db = await this.openDatabase();
+            console.log('✅ [OFFLINE MANAGER] Base de datos abierta');
 
             // Registrar Service Worker
             if ('serviceWorker' in navigator) {
@@ -41,9 +46,11 @@ class OfflineManager {
                 await this.syncPendingData();
             }
 
+            this.isReady = true;
             console.log('✅ [OFFLINE MANAGER] Sistema offline inicializado correctamente');
         } catch (error) {
             console.error('❌ [OFFLINE MANAGER] Error inicializando:', error);
+            throw error;
         }
     }
 
@@ -200,9 +207,15 @@ class OfflineManager {
 
     // Guardar visitas para offline
     async saveVisitasOffline(visitas, tecnicoId) {
-        if (!this.db) return false;
-
         try {
+            // ESPERAR A QUE EL MANAGER ESTÉ LISTO
+            if (!this.isReady) {
+                console.log('⏳ [OFFLINE MANAGER] Esperando a que se inicialice para guardar visitas...');
+                await this.ready;
+            }
+
+            if (!this.db) return false;
+
             const tx = this.db.transaction('offline-visitas', 'readwrite');
             const store = tx.objectStore('offline-visitas');
 
@@ -222,9 +235,15 @@ class OfflineManager {
 
     // Cargar visitas desde offline
     async loadVisitasOffline(tecnicoId) {
-        if (!this.db) return [];
-
         try {
+            // ESPERAR A QUE EL MANAGER ESTÉ LISTO
+            if (!this.isReady) {
+                console.log('⏳ [OFFLINE MANAGER] Esperando a que se inicialice para cargar visitas...');
+                await this.ready;
+            }
+
+            if (!this.db) return [];
+
             const tx = this.db.transaction('offline-visitas', 'readonly');
             const store = tx.objectStore('offline-visitas');
             const index = store.index('tecnico_id');
@@ -463,8 +482,14 @@ class OfflineManager {
     // Guardar reporte offline (cuando no hay conexión)
     async guardarReporteOffline(reporteData) {
         try {
+            // ESPERAR A QUE EL MANAGER ESTÉ LISTO
+            if (!this.isReady) {
+                console.log('⏳ [OFFLINE MANAGER] Esperando a que se inicialice...');
+                await this.ready;
+            }
+
             if (!this.db) {
-                console.error('❌ [OFFLINE MANAGER] Base de datos no inicializada');
+                console.error('❌ [OFFLINE MANAGER] Base de datos no inicializada después de esperar');
                 return { success: false, message: 'Base de datos no disponible' };
             }
 
@@ -486,7 +511,11 @@ class OfflineManager {
 
             // Guardar fotos si existen
             if (reporteData.fotos && reporteData.fotos.length > 0) {
-                await this.guardarFotosOffline(localId, reporteData.fotos);
+                console.log(`📸 [OFFLINE MANAGER] Guardando ${reporteData.fotos.length} fotos offline...`);
+                const resultadoFotos = await this.guardarFotosOffline(localId, reporteData.fotos);
+                if (resultadoFotos) {
+                    console.log(`✅ [OFFLINE MANAGER] ${reporteData.fotos.length} fotos guardadas offline`);
+                }
             }
 
             return { success: true, localId: localId };
