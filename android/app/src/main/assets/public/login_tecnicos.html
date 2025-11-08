@@ -487,14 +487,44 @@
                 }
             } catch (error) {
                 console.error('Error en login:', error);
-                showAlert('Error de conexión. Por favor, intenta nuevamente.', 'danger');
+                console.error('Intentando conectar a:', API_BASE_URL + '/api/login-tecnicos');
+
+                // Mostrar error más detallado
+                let errorMsg = 'Error de conexión. ';
+                if (error.message) {
+                    errorMsg += error.message;
+                } else {
+                    errorMsg += 'No se pudo conectar al servidor. Verifica tu conexión a internet.';
+                }
+
+                showAlert(errorMsg, 'danger');
             } finally {
                 setLoading(false);
             }
         });
 
+        // Probar conexión al cargar
+        async function testConnection() {
+            try {
+                console.log('🔍 Probando conexión a:', API_BASE_URL);
+                const response = await fetch(API_BASE_URL + '/api/session', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log('✅ Conexión exitosa. Status:', response.status);
+            } catch (error) {
+                console.error('❌ Error de conexión:', error);
+                console.error('URL probada:', API_BASE_URL);
+            }
+        }
+
         // Verificar si ya hay una sesión activa
         window.addEventListener('DOMContentLoaded', () => {
+            // Probar conexión primero
+            testConnection();
+
             const token = localStorage.getItem('token_tecnico');
             const remember = localStorage.getItem('remember_tecnico');
 

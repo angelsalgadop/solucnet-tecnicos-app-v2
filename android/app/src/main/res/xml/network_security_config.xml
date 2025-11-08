@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- Configuración para permitir conexiones a cliente.solucnet.com -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">cliente.solucnet.com</domain>
-        <trust-anchors>
-            <!-- Confiar en certificados del sistema -->
-            <certificates src="system" />
-            <!-- Confiar en certificados autofirmados -->
-            <certificates src="user" />
-        </trust-anchors>
-    </domain-config>
-
-    <!-- Configuración base para debug -->
+    <!-- Permitir TODO el tráfico (debug mode) -->
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />
             <certificates src="user" />
         </trust-anchors>
     </base-config>
+
+    <!-- Configuración específica para cliente.solucnet.com -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">cliente.solucnet.com</domain>
+        <domain includeSubdomains="true">solucnet.com</domain>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- Depuración: permitir certificados autofirmados -->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
 </network-security-config>
