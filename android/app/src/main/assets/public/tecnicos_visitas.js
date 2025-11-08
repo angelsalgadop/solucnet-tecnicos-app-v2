@@ -99,13 +99,20 @@ async function cargarVisitasTecnico(mostrarSpinner = true) {
             `;
         }
 
+        // TIMEOUT de 15 segundos para cargar visitas
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+
         const response = await fetch(API_BASE_URL + '/api/mis-visitas', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
             },
-            cache: 'no-cache' // Evitar caché del navegador
+            cache: 'no-cache', // Evitar caché del navegador
+            signal: controller.signal
         });
+
+        clearTimeout(timeoutId);
 
         const resultado = await response.json();
 
@@ -154,8 +161,17 @@ async function cargarVisitasTecnico(mostrarSpinner = true) {
 
     } catch (error) {
         console.error('Error cargando visitas:', error);
+
+        // Mensaje más específico para timeout
+        let mensajeError = 'Error cargando visitas asignadas';
+        if (error.name === 'AbortError') {
+            mensajeError = 'Timeout: El servidor tardó demasiado en responder. <br>Verifica tu conexión a internet e intenta recargar la página.';
+        } else if (error.message?.includes('fetch') || error.message?.includes('Failed')) {
+            mensajeError = 'No se pudo conectar al servidor. <br>Verifica que estés conectado a internet y que el servidor esté disponible.';
+        }
+
         if (visitasAsignadas.length === 0) {
-            visitasContainer.innerHTML = '<div class="alert alert-danger">Error cargando visitas asignadas</div>';
+            visitasContainer.innerHTML = `<div class="alert alert-danger">${mensajeError}</div>`;
         }
         actualizarIndicadorActualizacion();
     }
