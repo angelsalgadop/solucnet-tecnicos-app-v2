@@ -470,15 +470,15 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    // Guardar token
+                    // SIEMPRE guardar token y usuario en localStorage (necesario para notificaciones push)
                     localStorage.setItem('token_tecnico', data.token);
+                    localStorage.setItem('user_tecnico', JSON.stringify(data.user));
 
-                    // Guardar usuario si "Recordar mi sesión" está activado
+                    // Guardar preferencia de "mantener sesión activa"
                     if (rememberMeCheckbox.checked) {
                         localStorage.setItem('remember_tecnico', 'true');
-                        localStorage.setItem('user_tecnico', JSON.stringify(data.user));
                     } else {
-                        sessionStorage.setItem('user_tecnico', JSON.stringify(data.user));
+                        localStorage.setItem('remember_tecnico', 'false');
                     }
 
                     showAlert('¡Login exitoso! Redirigiendo...', 'success');

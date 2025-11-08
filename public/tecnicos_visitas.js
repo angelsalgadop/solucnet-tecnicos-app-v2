@@ -983,58 +983,98 @@ async function guardarReporteVisita() {
             console.log('✅ Coordenadas validadas y agregadas al reporte:', coordenadasCapturadas);
         }
 
-        // Enviar reporte
-        const response = await fetch(API_BASE_URL + '/api/reportes-visitas', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        });
+        // Verificar conexión antes de enviar
+        let enLinea = navigator.onLine;
+        console.log(`📡 Estado de conexión: ${enLinea ? 'ONLINE' : 'OFFLINE'}`);
 
-        const resultado = await response.json();
+        // Intentar enviar reporte
+        try {
+            const response = await fetch(API_BASE_URL + '/api/reportes-visitas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData),
+                signal: AbortSignal.timeout(10000) // Timeout de 10 segundos
+            });
 
-        if (resultado.success) {
-            // Si hay fotos, subirlas
-            if (fotosSeleccionadas.length > 0) {
-                await subirFotosReporte(resultado.reporteId);
+            const resultado = await response.json();
+
+            if (resultado.success) {
+                // Si hay fotos, subirlas
+                if (fotosSeleccionadas.length > 0) {
+                    await subirFotosReporte(resultado.reporteId);
+                }
+
+                mostrarAlerta('✅ Reporte de visita guardado exitosamente', 'success');
+
+                // ** NUEVA FUNCIONALIDAD: Asignar equipo si se capturó serial **
+                if (window.serialEquipoCapturado) {
+                    console.log(`📦 [GUARDAR REPORTE] Asignando equipo con serial: ${window.serialEquipoCapturado}, tipo: ${window.tipoEquipoCapturado || 'Onu CData'}`);
+
+                    const resultadoAsignacion = await asignarEquipoAlCompletar(
+                        visitaId,
+                        window.serialEquipoCapturado,
+                        180000,
+                        window.tipoEquipoCapturado || 'Onu CData'
+                    );
+
+                    if (resultadoAsignacion.success) {
+                        console.log(`✅ [GUARDAR REPORTE] Equipo asignado exitosamente: ${resultadoAsignacion.message}`);
+                    } else {
+                        console.error(`⚠️ [GUARDAR REPORTE] Error asignando equipo: ${resultadoAsignacion.message}`);
+                        // No fallar la visita si hay error asignando equipo, solo avisar
+                        mostrarAlerta(`⚠️ Visita completada, pero hubo un error asignando el equipo: ${resultadoAsignacion.message}`, 'warning');
+                    }
+
+                    // Limpiar serial y tipo capturado
+                    window.serialEquipoCapturado = null;
+                    window.tipoEquipoCapturado = null;
+                }
+
+                // Remover la visita de la lista local
+                visitasAsignadas = visitasAsignadas.filter(v => v.id != formData.visita_id);
+                mostrarVisitasAsignadas();
+
+                // Cerrar modal
+                bootstrap.Modal.getInstance(document.getElementById('modalCompletarVisita')).hide();
+
+            } else {
+                mostrarAlerta(resultado.message || 'Error guardando el reporte', 'danger');
             }
 
-            mostrarAlerta('Reporte de visita guardado exitosamente', 'success');
+        } catch (fetchError) {
+            // Error de red o timeout - GUARDAR OFFLINE
+            console.log('❌ Error de conexión, guardando reporte OFFLINE:', fetchError.message);
 
-            // ** NUEVA FUNCIONALIDAD: Asignar equipo si se capturó serial **
-            if (window.serialEquipoCapturado) {
-                console.log(`📦 [GUARDAR REPORTE] Asignando equipo con serial: ${window.serialEquipoCapturado}, tipo: ${window.tipoEquipoCapturado || 'Onu CData'}`);
+            // Guardar reporte offline usando offline-manager
+            if (typeof window.offlineManager !== 'undefined' && window.offlineManager.guardarReporteOffline) {
+                const reporteOffline = {
+                    ...formData,
+                    fotos: fotosSeleccionadas,
+                    serial_equipo: window.serialEquipoCapturado,
+                    tipo_equipo: window.tipoEquipoCapturado,
+                    timestamp: Date.now()
+                };
 
-                const resultadoAsignacion = await asignarEquipoAlCompletar(
-                    visitaId,
-                    window.serialEquipoCapturado,
-                    180000,
-                    window.tipoEquipoCapturado || 'Onu CData'
-                );
+                await window.offlineManager.guardarReporteOffline(reporteOffline);
 
-                if (resultadoAsignacion.success) {
-                    console.log(`✅ [GUARDAR REPORTE] Equipo asignado exitosamente: ${resultadoAsignacion.message}`);
-                } else {
-                    console.error(`⚠️ [GUARDAR REPORTE] Error asignando equipo: ${resultadoAsignacion.message}`);
-                    // No fallar la visita si hay error asignando equipo, solo avisar
-                    mostrarAlerta(`⚠️ Visita completada, pero hubo un error asignando el equipo: ${resultadoAsignacion.message}`, 'warning');
-                }
+                mostrarAlerta('📴 Sin conexión. Reporte guardado OFFLINE. Se sincronizará automáticamente cuando haya conexión.', 'warning');
 
                 // Limpiar serial y tipo capturado
                 window.serialEquipoCapturado = null;
                 window.tipoEquipoCapturado = null;
+
+                // Remover la visita de la lista local
+                visitasAsignadas = visitasAsignadas.filter(v => v.id != formData.visita_id);
+                mostrarVisitasAsignadas();
+
+                // Cerrar modal
+                bootstrap.Modal.getInstance(document.getElementById('modalCompletarVisita')).hide();
+            } else {
+                // Si offline-manager no está disponible, mostrar error
+                mostrarAlerta('❌ No hay conexión y el sistema offline no está disponible. Por favor, verifica tu conexión e intenta de nuevo.', 'danger');
             }
-
-            // Remover la visita de la lista local
-            visitasAsignadas = visitasAsignadas.filter(v => v.id != formData.visita_id);
-            mostrarVisitasAsignadas();
-
-            // Cerrar modal
-            bootstrap.Modal.getInstance(document.getElementById('modalCompletarVisita')).hide();
-
-        } else {
-            mostrarAlerta(resultado.message || 'Error guardando el reporte', 'danger');
         }
 
     } catch (error) {
