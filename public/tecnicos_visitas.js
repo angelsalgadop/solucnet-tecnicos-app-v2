@@ -31,7 +31,7 @@ function configurarEventListeners() {
         localStorage.removeItem('remember_tecnico');
         sessionStorage.removeItem('user_tecnico');
         // Redirigir al login de técnicos
-        window.location.href = 'login_tecnicos.html';
+        window.location.href = 'index.html';
     });
 
     // Drag and drop para fotos
@@ -83,7 +83,7 @@ async function cargarVisitasTecnico(mostrarSpinner = true) {
     try {
         const token = localStorage.getItem('token_tecnico');
         if (!token) {
-            window.location.href = 'login_tecnicos.html';
+            window.location.href = 'index.html';
             return;
         }
 
@@ -115,7 +115,7 @@ async function cargarVisitasTecnico(mostrarSpinner = true) {
                 localStorage.removeItem('token_tecnico');
                 localStorage.removeItem('user_tecnico');
                 localStorage.removeItem('remember_tecnico');
-                window.location.href = 'login_tecnicos.html';
+                window.location.href = 'index.html';
                 return;
             }
             throw new Error(resultado.message || 'Error cargando visitas');

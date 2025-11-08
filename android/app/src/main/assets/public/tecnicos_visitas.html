@@ -919,7 +919,7 @@
 
             if (!token) {
                 // No hay token, redirigir al login
-                window.location.href = '/login_tecnicos.html';
+                window.location.href = 'index.html';
                 return;
             }
 
@@ -939,7 +939,7 @@
                     localStorage.removeItem('user_tecnico');
                     localStorage.removeItem('remember_tecnico');
                     sessionStorage.removeItem('user_tecnico');
-                    window.location.href = '/login_tecnicos.html';
+                    window.location.href = 'index.html';
                     return;
                 }
 
@@ -951,7 +951,7 @@
                     localStorage.removeItem('remember_tecnico');
                     sessionStorage.removeItem('user_tecnico');
                     alert('Acceso denegado. Solo usuarios técnicos pueden acceder a esta página.');
-                    window.location.href = '/login_tecnicos.html';
+                    window.location.href = 'index.html';
                     return;
                 }
 
@@ -965,7 +965,7 @@
                 localStorage.removeItem('user_tecnico');
                 localStorage.removeItem('remember_tecnico');
                 sessionStorage.removeItem('user_tecnico');
-                window.location.href = '/login_tecnicos.html';
+                window.location.href = 'index.html';
             }
         })();
     </script>
