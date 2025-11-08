@@ -61,6 +61,20 @@ function configurarEventListeners() {
 // Inicializar sistema
 async function inicializarSistema() {
     try {
+        // Mostrar nombre del técnico desde localStorage inmediatamente
+        const userTecnico = localStorage.getItem('user_tecnico') || sessionStorage.getItem('user_tecnico');
+        if (userTecnico) {
+            try {
+                const user = JSON.parse(userTecnico);
+                if (user && user.nombre) {
+                    nombreTecnico.textContent = user.nombre;
+                    tecnicoActual = user;
+                }
+            } catch (e) {
+                console.error('Error parseando user_tecnico:', e);
+            }
+        }
+
         // El usuario ya está autenticado (verificado en el HTML)
         // Verificar permisos para agregar cajas NAP
         await verificarPermisoAgregarNaps();
@@ -99,9 +113,9 @@ async function cargarVisitasTecnico(mostrarSpinner = true) {
             `;
         }
 
-        // TIMEOUT de 15 segundos para cargar visitas
+        // TIMEOUT de 10 segundos para cargar visitas
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         const response = await fetch(API_BASE_URL + '/api/mis-visitas', {
             method: 'GET',
@@ -162,16 +176,34 @@ async function cargarVisitasTecnico(mostrarSpinner = true) {
     } catch (error) {
         console.error('Error cargando visitas:', error);
 
-        // Mensaje más específico para timeout
+        // Mensaje más específico para timeout con botón de reintentar
         let mensajeError = 'Error cargando visitas asignadas';
+        let detalleError = 'Ocurrió un error desconocido';
+
         if (error.name === 'AbortError') {
-            mensajeError = 'Timeout: El servidor tardó demasiado en responder. <br>Verifica tu conexión a internet e intenta recargar la página.';
+            mensajeError = 'Timeout: El servidor tardó demasiado en responder';
+            detalleError = 'El servidor en cliente.solucnet.com:3000 no respondió en 10 segundos';
         } else if (error.message?.includes('fetch') || error.message?.includes('Failed')) {
-            mensajeError = 'No se pudo conectar al servidor. <br>Verifica que estés conectado a internet y que el servidor esté disponible.';
+            mensajeError = 'No se pudo conectar al servidor';
+            detalleError = 'Verifica que estés conectado a internet y que el servidor esté disponible';
         }
 
         if (visitasAsignadas.length === 0) {
-            visitasContainer.innerHTML = `<div class="alert alert-danger">${mensajeError}</div>`;
+            visitasContainer.innerHTML = `
+                <div class="alert alert-warning text-center">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+                    <h5>${mensajeError}</h5>
+                    <p class="mb-3">${detalleError}</p>
+                    <button class="btn btn-success" onclick="location.reload()">
+                        <i class="fas fa-sync-alt"></i> Reintentar
+                    </button>
+                    <hr class="my-3">
+                    <small class="text-muted">
+                        <strong>Servidor:</strong> ${API_BASE_URL}<br>
+                        <strong>Error:</strong> ${error.message || 'Sin detalles'}
+                    </small>
+                </div>
+            `;
         }
         actualizarIndicadorActualizacion();
     }
