@@ -10,7 +10,7 @@
  */
 
 // Configuración del servidor
-const API_BASE_URL = 'https://cliente.solucnet.com:3000';
+const API_BASE_URL = 'http://cliente.solucnet.com:3000';
 
 class OfflineManager {
     constructor() {

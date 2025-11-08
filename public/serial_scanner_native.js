@@ -4,7 +4,7 @@
  */
 
 // Configuración del servidor
-const API_BASE_URL = 'https://cliente.solucnet.com:3000';
+const API_BASE_URL = 'http://cliente.solucnet.com:3000';
 
 // Log para verificar versión
 console.log('🔧 serial_scanner_native.js CARGADO - Versión: 1761679244 - CON SELECTOR TV BOX/MODEM');
