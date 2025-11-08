@@ -15,6 +15,11 @@ workflows:
       - name: Generate icons
         script: |
           node generate-icons.js || echo "Icons generation skipped"
+      - name: Copy web assets to Android
+        script: |
+          echo "Copiando archivos web a Android..."
+          npx cap copy android
+          echo "✅ Archivos copiados"
       - name: Set Android SDK location
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
