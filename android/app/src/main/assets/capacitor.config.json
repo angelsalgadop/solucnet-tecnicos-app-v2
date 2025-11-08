@@ -4,7 +4,8 @@
 	"webDir": "public",
 	"android": {
 		"allowMixedContent": true,
-		"backgroundColor": "#28a745"
+		"backgroundColor": "#28a745",
+		"path": "login_tecnicos.html"
 	},
 	"plugins": {
 		"SplashScreen": {
