@@ -907,6 +907,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Configuración global API_BASE_URL (declarar UNA SOLA VEZ para evitar redeclaración) -->
+    <script>
+        window.API_BASE_URL = window.API_BASE_URL || 'https://cliente.solucnet.com:3000';
+        const API_BASE_URL = window.API_BASE_URL;
+    </script>
+
     <!-- Sistema de Debug Logging -->
     <script src="debug-logger.js?v=1.0.0"></script>
 
@@ -917,7 +923,7 @@
     <script src="permisos-manager.js?v=1.0.0"></script>
 
     <!-- Script para captura de seriales con BarcodeDetector NATIVO (INSTANTÁNEO) -->
-    <script src="serial_scanner_native.js?v=1762640602"></script>
+    <script src="serial_scanner_native.js?v=1762641707"></script>
     <script>
         // Verificar autenticación SIN BLOQUEAR - solo verificar token existe
         (function verificarAutenticacion() {
@@ -934,6 +940,6 @@
             console.log('✅ Token encontrado, cargando interfaz...');
         })();
     </script>
-    <script src="tecnicos_visitas.js?v=1762640602"></script>
+    <script src="tecnicos_visitas.js?v=1762641707"></script>
 </body>
 </html>
