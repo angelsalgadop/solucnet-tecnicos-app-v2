@@ -606,6 +606,34 @@ async function confirmarInicioVisita() {
     try {
         const visitaId = document.getElementById('visitaIniciarId').value;
 
+        // Verificar si estamos offline
+        const estaOffline = !navigator.onLine || (window.offlineManager && !window.offlineManager.isOnline);
+
+        if (estaOffline) {
+            console.log('📴 [OFFLINE] Iniciando visita en modo offline...');
+
+            // Usar función offline
+            const resultado = await window.offlineManager.iniciarVisitaOffline(visitaId);
+
+            if (resultado.success) {
+                mostrarAlerta('✅ Visita iniciada en modo OFFLINE. Se sincronizará cuando haya conexión.', 'warning');
+
+                // Actualizar estado local en el array
+                const visitaIndex = visitasAsignadas.findIndex(v => v.id == visitaId);
+                if (visitaIndex !== -1) {
+                    visitasAsignadas[visitaIndex].estado = 'en_progreso';
+                    mostrarVisitasAsignadas();
+                }
+
+                bootstrap.Modal.getInstance(document.getElementById('modalIniciarVisita')).hide();
+            } else {
+                mostrarAlerta('Error iniciando visita offline: ' + resultado.message, 'danger');
+            }
+
+            return;
+        }
+
+        // MODO ONLINE: Intentar con el servidor
         const response = await fetch(API_BASE_URL + `/api/visitas-tecnicas/${visitaId}/iniciar`, {
             method: 'PUT',
             headers: {
@@ -632,7 +660,32 @@ async function confirmarInicioVisita() {
 
     } catch (error) {
         console.error('Error iniciando visita:', error);
-        mostrarAlerta('Error iniciando la visita', 'danger');
+
+        // Si falla online, intentar offline como fallback
+        const visitaId = document.getElementById('visitaIniciarId').value;
+        console.log('⚠️ [FALLBACK] Error online, intentando guardar offline...');
+
+        try {
+            const resultado = await window.offlineManager.iniciarVisitaOffline(visitaId);
+
+            if (resultado.success) {
+                mostrarAlerta('⚠️ Sin conexión. Visita iniciada en modo OFFLINE. Se sincronizará automáticamente.', 'warning');
+
+                // Actualizar estado local
+                const visitaIndex = visitasAsignadas.findIndex(v => v.id == visitaId);
+                if (visitaIndex !== -1) {
+                    visitasAsignadas[visitaIndex].estado = 'en_progreso';
+                    mostrarVisitasAsignadas();
+                }
+
+                bootstrap.Modal.getInstance(document.getElementById('modalIniciarVisita')).hide();
+            } else {
+                mostrarAlerta('Error iniciando la visita: ' + error.message, 'danger');
+            }
+        } catch (offlineError) {
+            console.error('Error guardando offline:', offlineError);
+            mostrarAlerta('Error iniciando la visita', 'danger');
+        }
     }
 }
 

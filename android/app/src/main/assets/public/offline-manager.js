@@ -57,7 +57,7 @@ class OfflineManager {
     // Abrir base de datos IndexedDB
     openDatabase() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open('solucnet-offline-db', 2);
+            const request = indexedDB.open('solucnet-offline-db', 3);
 
             request.onerror = () => reject(request.error);
             request.onsuccess = () => resolve(request.result);
@@ -98,6 +98,14 @@ class OfflineManager {
                     const ubicacionesStore = db.createObjectStore('offline-ubicaciones', { autoIncrement: true, keyPath: 'localId' });
                     ubicacionesStore.createIndex('visita_id', 'visita_id', { unique: false });
                     ubicacionesStore.createIndex('sincronizado', 'sincronizado', { unique: false });
+                }
+
+                // Store para inicios de visita offline (pendientes de sincronización)
+                if (!db.objectStoreNames.contains('offline-inicios-visita')) {
+                    const iniciosStore = db.createObjectStore('offline-inicios-visita', { autoIncrement: true, keyPath: 'localId' });
+                    iniciosStore.createIndex('visita_id', 'visita_id', { unique: false });
+                    iniciosStore.createIndex('sincronizado', 'sincronizado', { unique: false });
+                    iniciosStore.createIndex('timestamp', 'timestamp', { unique: false });
                 }
             };
         });
@@ -388,6 +396,9 @@ class OfflineManager {
         console.log('🔄 [OFFLINE MANAGER] Iniciando sincronización...');
 
         try {
+            // Sincronizar inicios de visita (primero, antes que reportes)
+            await this.syncIniciosVisita();
+
             // Sincronizar reportes
             await this.syncReportes();
 
@@ -623,6 +634,131 @@ class OfflineManager {
 
         } catch (error) {
             console.error('❌ [OFFLINE MANAGER] Error guardando fotos offline:', error);
+        }
+    }
+
+    // Iniciar visita en modo offline
+    async iniciarVisitaOffline(visitaId) {
+        try {
+            if (!this.db) {
+                await this.init();
+            }
+
+            console.log(`🚀 [OFFLINE MANAGER] Iniciando visita ${visitaId} en modo offline...`);
+
+            // 1. Guardar inicio pendiente de sincronización
+            const tx1 = this.db.transaction(['offline-inicios-visita'], 'readwrite');
+            const iniciosStore = tx1.objectStore('offline-inicios-visita');
+
+            const inicioData = {
+                visita_id: visitaId,
+                timestamp: Date.now(),
+                fecha_inicio: new Date().toISOString(),
+                sincronizado: false
+            };
+
+            await iniciosStore.add(inicioData);
+            console.log(`💾 [OFFLINE MANAGER] Inicio de visita guardado para sincronización posterior`);
+
+            // 2. Actualizar estado de la visita en offline-visitas
+            const tx2 = this.db.transaction(['offline-visitas'], 'readwrite');
+            const visitasStore = tx2.objectStore('offline-visitas');
+
+            // Obtener la visita actual
+            const visita = await new Promise((resolve, reject) => {
+                const request = visitasStore.get(visitaId);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+
+            if (visita) {
+                // Actualizar estado a "en_progreso"
+                visita.estado = 'en_progreso';
+                visita.fecha_inicio_local = new Date().toISOString();
+
+                await new Promise((resolve, reject) => {
+                    const request = visitasStore.put(visita);
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                });
+
+                console.log(`✅ [OFFLINE MANAGER] Estado de visita actualizado a "en_progreso"`);
+            }
+
+            return { success: true, message: 'Visita iniciada en modo offline' };
+
+        } catch (error) {
+            console.error('❌ [OFFLINE MANAGER] Error iniciando visita offline:', error);
+            return { success: false, message: error.message };
+        }
+    }
+
+    // Sincronizar inicios de visita pendientes
+    async syncIniciosVisita() {
+        try {
+            if (!this.db) return;
+
+            console.log('🔄 [OFFLINE MANAGER] Sincronizando inicios de visita...');
+
+            const tx = this.db.transaction(['offline-inicios-visita'], 'readwrite');
+            const store = tx.objectStore('offline-inicios-visita');
+            const index = store.index('sincronizado');
+
+            // Obtener todos los inicios NO sincronizados
+            const iniciosPendientes = await new Promise((resolve, reject) => {
+                const request = index.getAll(false);
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
+
+            if (iniciosPendientes.length === 0) {
+                console.log('✅ [OFFLINE MANAGER] No hay inicios de visita pendientes');
+                return;
+            }
+
+            console.log(`📤 [OFFLINE MANAGER] ${iniciosPendientes.length} inicios de visita pendientes de sincronización`);
+
+            const API_BASE_URL = window.API_BASE_URL || 'https://cliente.solucnet.com:3000';
+
+            for (const inicio of iniciosPendientes) {
+                try {
+                    console.log(`🔄 [SYNC] Sincronizando inicio de visita ${inicio.visita_id}...`);
+
+                    const response = await fetch(API_BASE_URL + `/api/visitas-tecnicas/${inicio.visita_id}/iniciar`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        console.log(`✅ [SYNC] Inicio de visita ${inicio.visita_id} sincronizado`);
+
+                        // Marcar como sincronizado
+                        const txUpdate = this.db.transaction(['offline-inicios-visita'], 'readwrite');
+                        const storeUpdate = txUpdate.objectStore('offline-inicios-visita');
+
+                        inicio.sincronizado = true;
+                        inicio.fecha_sincronizacion = new Date().toISOString();
+
+                        await new Promise((resolve, reject) => {
+                            const request = storeUpdate.put(inicio);
+                            request.onsuccess = () => resolve();
+                            request.onerror = () => reject(request.error);
+                        });
+                    } else {
+                        console.warn(`⚠️ [SYNC] Error sincronizando inicio ${inicio.visita_id}: ${response.status}`);
+                    }
+
+                } catch (error) {
+                    console.error(`❌ [SYNC] Error en inicio de visita ${inicio.visita_id}:`, error);
+                }
+            }
+
+            console.log('✅ [OFFLINE MANAGER] Sincronización de inicios completada');
+
+        } catch (error) {
+            console.error('❌ [OFFLINE MANAGER] Error sincronizando inicios:', error);
         }
     }
 }

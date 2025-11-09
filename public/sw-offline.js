@@ -251,7 +251,7 @@ async function syncOfflineData() {
 // Abrir IndexedDB
 function openDB() {
     return new Promise((resolve, reject) => {
-        const request = indexedDB.open('solucnet-offline-db', 1);
+        const request = indexedDB.open('solucnet-offline-db', 3);
 
         request.onerror = () => reject(request.error);
         request.onsuccess = () => resolve(request.result);
