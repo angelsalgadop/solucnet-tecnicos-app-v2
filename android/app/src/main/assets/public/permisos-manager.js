@@ -17,9 +17,10 @@ async function solicitarPermisosIniciales() {
         // PASO 1: Verificar permisos actuales PRIMERO
         console.log('🔍 PASO 1: Verificando permisos actuales...');
 
-        const { Geolocation } = await import('@capacitor/geolocation');
-        const { Camera } = await import('@capacitor/camera');
-        const { PushNotifications } = await import('@capacitor/push-notifications');
+        // Usar Capacitor.Plugins en lugar de import dinámico
+        const { Geolocation } = Capacitor.Plugins;
+        const { Camera } = Capacitor.Plugins;
+        const { PushNotifications } = Capacitor.Plugins;
 
         const permisoUbicacionActual = await Geolocation.checkPermissions();
         const permisoCamaraActual = await Camera.checkPermissions();
@@ -165,7 +166,7 @@ async function configurarNotificaciones() {
     }
 
     try {
-        const { PushNotifications } = await import('@capacitor/push-notifications');
+        const { PushNotifications } = Capacitor.Plugins;
 
         // Listener: Registro exitoso
         await PushNotifications.addListener('registration', (token) => {
@@ -253,7 +254,7 @@ async function mostrarNotificacionLocal(titulo, mensaje, datos = {}) {
     }
 
     try {
-        const { LocalNotifications } = await import('@capacitor/local-notifications');
+        const { LocalNotifications } = Capacitor.Plugins;
 
         await LocalNotifications.schedule({
             notifications: [{

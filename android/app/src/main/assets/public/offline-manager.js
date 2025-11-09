@@ -194,9 +194,24 @@ class OfflineManager {
         try {
             const tx = this.db.transaction(['offline-reportes', 'offline-fotos', 'offline-requests'], 'readonly');
 
-            const reportes = await tx.objectStore('offline-reportes').index('sincronizado').getAll(false);
-            const fotos = await tx.objectStore('offline-fotos').index('sincronizado').getAll(false);
-            const requests = await tx.objectStore('offline-requests').getAll();
+            // Usar promesas explícitas para getAll()
+            const reportes = await new Promise((resolve, reject) => {
+                const request = tx.objectStore('offline-reportes').index('sincronizado').getAll(false);
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
+
+            const fotos = await new Promise((resolve, reject) => {
+                const request = tx.objectStore('offline-fotos').index('sincronizado').getAll(false);
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
+
+            const requests = await new Promise((resolve, reject) => {
+                const request = tx.objectStore('offline-requests').getAll();
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
 
             return reportes.length > 0 || fotos.length > 0 || requests.length > 0;
         } catch (error) {
@@ -242,12 +257,29 @@ class OfflineManager {
                 await this.ready;
             }
 
-            if (!this.db) return [];
+            if (!this.db) {
+                console.log('❌ [OFFLINE MANAGER] DB no disponible');
+                return [];
+            }
+
+            // Validar que tecnicoId sea un número válido
+            if (!tecnicoId || typeof tecnicoId !== 'number') {
+                console.error(`❌ [OFFLINE MANAGER] tecnicoId inválido: ${tecnicoId} (tipo: ${typeof tecnicoId})`);
+                return [];
+            }
+
+            console.log(`🔍 [OFFLINE MANAGER] Buscando visitas para técnico ID: ${tecnicoId}`);
 
             const tx = this.db.transaction('offline-visitas', 'readonly');
             const store = tx.objectStore('offline-visitas');
             const index = store.index('tecnico_id');
-            const visitas = await index.getAll(tecnicoId);
+
+            // Usar promesa explícita para getAll()
+            const visitas = await new Promise((resolve, reject) => {
+                const request = index.getAll(tecnicoId);
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
 
             console.log(`✅ [OFFLINE MANAGER] ${visitas.length} visitas cargadas desde offline`);
             return visitas;
@@ -364,7 +396,13 @@ class OfflineManager {
         const tx = this.db.transaction('offline-reportes', 'readwrite');
         const store = tx.objectStore('offline-reportes');
         const index = store.index('sincronizado');
-        const reportes = await index.getAll(false);
+
+        // Usar promesa explícita para getAll()
+        const reportes = await new Promise((resolve, reject) => {
+            const request = index.getAll(false);
+            request.onsuccess = () => resolve(request.result || []);
+            request.onerror = () => reject(request.error);
+        });
 
         console.log(`📤 [OFFLINE MANAGER] Sincronizando ${reportes.length} reportes...`);
 
