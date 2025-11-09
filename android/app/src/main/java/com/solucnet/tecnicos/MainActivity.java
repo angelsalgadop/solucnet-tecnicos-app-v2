@@ -65,10 +65,7 @@ public class MainActivity extends BridgeActivity {
             webSettings.setDatabasePath(databasePath);
         }
 
-        // CRÍTICO: Configurar cache para persistencia
-        webSettings.setAppCacheEnabled(true);
-        String appCachePath = getApplicationContext().getCacheDir().getAbsolutePath();
-        webSettings.setAppCachePath(appCachePath);
+        // Configurar modo de cache (sin usar métodos deprecados)
         webSettings.setCacheMode(android.webkit.WebSettings.LOAD_DEFAULT);
     }
 
