@@ -3,11 +3,12 @@
 	"appName": "SolucNet Técnicos",
 	"webDir": "public",
 	"server": {
-		"androidScheme": "http"
+		"androidScheme": "https"
 	},
 	"android": {
 		"allowMixedContent": true,
-		"backgroundColor": "#28a745"
+		"backgroundColor": "#28a745",
+		"webContentsDebuggingEnabled": true
 	},
 	"plugins": {
 		"SplashScreen": {
