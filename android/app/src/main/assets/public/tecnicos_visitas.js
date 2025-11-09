@@ -292,8 +292,12 @@ async function cargarVisitasTecnico(mostrarSpinner = true) {
         if (hashNuevo !== hashVisitasAnterior || visitasAsignadas.length === 0) {
             console.log('✅ Datos actualizados detectados, recargando vista');
 
-            visitasAsignadas = resultado.visitas;
-            visitasSinFiltrar = [...resultado.visitas]; // Copia para filtros
+            // FILTRAR VISITAS COMPLETADAS para evitar que reaparezcan después de sincronizar
+            const visitasSinCompletar = resultado.visitas.filter(v => v.estado !== 'completada');
+            console.log(`📋 Visitas filtradas: ${visitasSinCompletar.length} activas de ${resultado.visitas.length} totales`);
+
+            visitasAsignadas = visitasSinCompletar;
+            visitasSinFiltrar = [...visitasSinCompletar]; // Copia para filtros
             llenarFiltroLocalidades();
             mostrarVisitasAsignadas();
 
@@ -933,9 +937,13 @@ async function tomarFotoConCamaraTrasera() {
             const photo = await Camera.getPhoto({
                 quality: 90,
                 allowEditing: false,
-                resultType: 'base64',  // Obtener base64 directamente
-                source: 'camera',      // Forzar usar cámara (no galería)
-                direction: 'rear'      // FORZAR CÁMARA TRASERA
+                resultType: 'Base64',  // IMPORTANTE: Primera letra mayúscula
+                source: 'CAMERA',      // IMPORTANTE: Todo en mayúsculas para Android
+                direction: 'REAR',     // IMPORTANTE: Todo en mayúsculas
+                saveToGallery: false,
+                correctOrientation: true,
+                width: 1920,           // Limitar tamaño para optimizar
+                height: 1080
             });
 
             // Convertir base64 a File object

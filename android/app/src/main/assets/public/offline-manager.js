@@ -706,7 +706,7 @@ class OfflineManager {
 
             // Obtener todos los inicios NO sincronizados
             const iniciosPendientes = await new Promise((resolve, reject) => {
-                const request = index.getAll(false);
+                const request = index.getAll(IDBKeyRange.only(false));
                 request.onsuccess = () => resolve(request.result || []);
                 request.onerror = () => reject(request.error);
             });
