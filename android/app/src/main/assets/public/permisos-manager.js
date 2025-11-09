@@ -210,8 +210,20 @@ async function configurarNotificaciones() {
 
         console.log('✅ [CONFIG] Listeners configurados exitosamente');
 
-        // AHORA SÍ: Registrar para recibir notificaciones (después de configurar listeners)
-        // Usar setTimeout para hacerlo asíncrono y no bloqueante
+        // DESACTIVADO TEMPORALMENTE: Registro de notificaciones push
+        // Requiere configuración de Firebase Cloud Messaging (FCM) en el backend
+        // Para habilitar:
+        // 1. Configurar FCM en Google Cloud Console
+        // 2. Agregar google-services.json a android/app/
+        // 3. Implementar endpoint /api/registrar-push-token en el backend
+        // 4. Descomentar el código abajo
+
+        console.log('⚠️ [CONFIG] Registro de notificaciones PUSH desactivado');
+        console.log('ℹ️ [CONFIG] La app funcionará normalmente sin notificaciones push');
+        console.log('ℹ️ [CONFIG] Para habilitar: configurar Firebase Cloud Messaging');
+
+        /*
+        // CÓDIGO DESACTIVADO - Descomentar cuando FCM esté configurado:
         console.log('🔔 [CONFIG] Programando registro de notificaciones...');
         setTimeout(async () => {
             try {
@@ -221,9 +233,9 @@ async function configurarNotificaciones() {
             } catch (registerError) {
                 console.error('❌ [REGISTER] Error al registrar notificaciones:', registerError);
                 console.error('❌ [REGISTER] Stack:', registerError.stack);
-                // NO lanzar error - continuar sin notificaciones push
             }
-        }, 1000); // Esperar 1 segundo después de que la app esté completamente cargada
+        }, 1000);
+        */
 
         console.log('✅ [CONFIG] Configuración de notificaciones completada');
     } catch (error) {
