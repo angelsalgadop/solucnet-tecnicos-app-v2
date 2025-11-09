@@ -505,20 +505,43 @@
                 console.error('Tipo de error:', error.name);
                 console.error('Mensaje:', error.message);
 
-                // Mostrar error más detallado
-                let errorMsg = 'Error de conexión';
+                // Determinar el tipo de error específico
+                let errorMsg = '';
+                let errorIcon = '⚠️';
 
-                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                    errorMsg = 'No se pudo conectar al servidor. Posibles causas:<br>' +
-                               '• El servidor no está disponible<br>' +
-                               '• Problema con certificado SSL<br>' +
-                               '• Sin conexión a internet<br><br>' +
-                               'Servidor: ' + API_BASE_URL;
-                } else if (error.message) {
-                    errorMsg += ': ' + error.message;
+                // Verificar primero si hay conexión a internet
+                if (!navigator.onLine) {
+                    errorIcon = '📡';
+                    errorMsg = '<strong>Sin conexión a internet</strong><br><br>' +
+                               '❌ Tu dispositivo no tiene conexión de datos o WiFi activa.<br><br>' +
+                               '✅ Por favor, activa tu conexión y vuelve a intentar.';
+                }
+                // Error de timeout o servidor no disponible
+                else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    errorIcon = '🔌';
+                    errorMsg = '<strong>No se pudo conectar al servidor</strong><br><br>' +
+                               '❌ El servidor no responde o no está disponible.<br><br>' +
+                               '<strong>Posibles causas:</strong><br>' +
+                               '• El servidor está reiniciando (espera 1 minuto)<br>' +
+                               '• Problemas de red o firewall<br>' +
+                               '• Certificado SSL no aceptado<br><br>' +
+                               '<small>Servidor: <code>' + API_BASE_URL + '</code></small>';
+                }
+                // Error de timeout específico
+                else if (error.name === 'AbortError' || error.message.includes('timeout')) {
+                    errorIcon = '⏱️';
+                    errorMsg = '<strong>Timeout de conexión</strong><br><br>' +
+                               '❌ El servidor tardó demasiado en responder.<br><br>' +
+                               '✅ Verifica tu conexión e intenta nuevamente.';
+                }
+                // Otros errores
+                else {
+                    errorIcon = '❌';
+                    errorMsg = '<strong>Error desconocido</strong><br><br>' +
+                               error.message || 'Error al procesar la solicitud';
                 }
 
-                showAlert(errorMsg, 'danger');
+                showAlert(errorIcon + ' ' + errorMsg, 'danger');
             } finally {
                 setLoading(false);
             }

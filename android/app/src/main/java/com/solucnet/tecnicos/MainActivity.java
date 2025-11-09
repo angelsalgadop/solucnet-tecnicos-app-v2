@@ -45,8 +45,11 @@ public class MainActivity extends BridgeActivity {
     public void onStart() {
         super.onStart();
 
+        android.util.Log.d("MainActivity", "========== CONFIGURANDO WEBVIEW ==========");
+
         // Aplicar WebViewClient personalizado que acepta certificados SSL
         getBridge().getWebView().setWebViewClient(new SSLWebViewClient(getBridge()));
+        android.util.Log.d("MainActivity", "✅ SSLWebViewClient configurado");
 
         // CRÍTICO: Configurar WebView para persistir localStorage
         // Sin esto, localStorage se borra al cerrar la app
@@ -55,28 +58,35 @@ public class MainActivity extends BridgeActivity {
 
         // Habilitar DOM Storage (necesario para localStorage)
         webSettings.setDomStorageEnabled(true);
+        android.util.Log.d("MainActivity", "✅ DomStorage habilitado: " + webSettings.getDomStorageEnabled());
 
         // Habilitar Database (necesario para IndexedDB)
         webSettings.setDatabaseEnabled(true);
+        android.util.Log.d("MainActivity", "✅ Database habilitado: " + webSettings.getDatabaseEnabled());
 
         // Configurar directorio de datos persistente (solo para Android antiguo)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             String databasePath = getApplicationContext().getDir("database", MODE_PRIVATE).getPath();
             webSettings.setDatabasePath(databasePath);
+            android.util.Log.d("MainActivity", "✅ Database path: " + databasePath);
         }
 
         // Configurar modo de cache (sin usar métodos deprecados)
         webSettings.setCacheMode(android.webkit.WebSettings.LOAD_DEFAULT);
+        android.util.Log.d("MainActivity", "✅ Cache mode: " + webSettings.getCacheMode());
 
         // CRÍTICO: Habilitar mixed content (HTTP + HTTPS)
         webSettings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        android.util.Log.d("MainActivity", "✅ Mixed content mode: " + webSettings.getMixedContentMode());
 
         // Habilitar JavaScript (necesario para la app)
         webSettings.setJavaScriptEnabled(true);
+        android.util.Log.d("MainActivity", "✅ JavaScript habilitado: " + webSettings.getJavaScriptEnabled());
 
         // Permitir acceso a archivos (para fotos offline)
         webSettings.setAllowFileAccess(true);
         webSettings.setAllowContentAccess(true);
+        android.util.Log.d("MainActivity", "✅ File/Content access habilitado");
 
         // Habilitar zoom (útil para debugging)
         webSettings.setBuiltInZoomControls(false);
@@ -85,6 +95,9 @@ public class MainActivity extends BridgeActivity {
         // User Agent (opcional - para identificar la app)
         String userAgent = webSettings.getUserAgentString();
         webSettings.setUserAgentString(userAgent + " SolucNetTecnicos/1.0");
+        android.util.Log.d("MainActivity", "✅ User Agent: " + webSettings.getUserAgentString());
+
+        android.util.Log.d("MainActivity", "========== WEBVIEW CONFIGURADO ==========");
     }
 
     @Override
