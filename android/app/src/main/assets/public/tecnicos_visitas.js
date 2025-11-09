@@ -1063,14 +1063,18 @@ function previsualizarFotos() {
     const files = document.getElementById('fotosReporte').files;
     const preview = document.getElementById('previsualizacionFotos');
 
+    console.log(`📸 [PREVISUALIZAR FOTOS] Archivos en input: ${files.length}`);
+
     if (files.length === 0) {
         preview.innerHTML = '';
         fotosSeleccionadas = [];
+        console.log(`📸 [PREVISUALIZAR FOTOS] Sin fotos - fotosSeleccionadas limpiado`);
         return;
     }
 
     // Actualizar array de fotos seleccionadas
     fotosSeleccionadas = Array.from(files);
+    console.log(`📸 [PREVISUALIZAR FOTOS] fotosSeleccionadas actualizado: ${fotosSeleccionadas.length} fotos`);
 
     // Crear un array para almacenar las promesas de lectura
     const readPromises = [];
@@ -1177,6 +1181,9 @@ async function guardarReporteVisita() {
             notas: document.getElementById('notasAdicionales').value
         };
 
+        console.log(`📋 [GUARDAR REPORTE] Iniciando guardado de reporte para visita ${visitaId}`);
+        console.log(`📸 [GUARDAR REPORTE] Estado inicial - fotosSeleccionadas.length: ${fotosSeleccionadas.length}`);
+
         // Validaciones
         if (!formData.problemas_encontrados || !formData.solucion_aplicada || !formData.cliente_satisfecho) {
             mostrarAlerta('Por favor completa todos los campos obligatorios', 'warning');
@@ -1281,9 +1288,16 @@ async function guardarReporteVisita() {
             const resultado = await response.json();
 
             if (resultado.success) {
+                console.log(`✅ [GUARDAR REPORTE] Reporte guardado con ID: ${resultado.reporteId}`);
+                console.log(`📸 [GUARDAR REPORTE] Fotos seleccionadas para subir: ${fotosSeleccionadas.length}`);
+
                 // Si hay fotos, subirlas
                 if (fotosSeleccionadas.length > 0) {
-                    await subirFotosReporte(resultado.reporteId);
+                    console.log(`📤 [GUARDAR REPORTE] Iniciando subida de ${fotosSeleccionadas.length} fotos para reporte ${resultado.reporteId}...`);
+                    const resultadoFotos = await subirFotosReporte(resultado.reporteId);
+                    console.log(`📸 [GUARDAR REPORTE] Resultado subida fotos:`, resultadoFotos);
+                } else {
+                    console.warn(`⚠️ [GUARDAR REPORTE] No hay fotos seleccionadas (fotosSeleccionadas.length = 0)`);
                 }
 
                 mostrarAlerta('✅ Reporte de visita guardado exitosamente', 'success');

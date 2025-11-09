@@ -475,6 +475,15 @@ class OfflineManager {
                         await fotosStore.put(foto);
                     }
 
+                    // CRÍTICO: Esperar a que la transacción de fotos se complete antes de continuar
+                    await new Promise((resolve, reject) => {
+                        txFotos.oncomplete = () => {
+                            console.log(`✅ Transacción de fotos completada para reporte ${result.reporteId}`);
+                            resolve();
+                        };
+                        txFotos.onerror = () => reject(txFotos.error);
+                    });
+
                     // Marcar reporte como sincronizado
                     reporte.sincronizado = true;
                     reporte.serverId = result.reporteId;
