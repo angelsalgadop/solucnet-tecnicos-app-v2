@@ -16,19 +16,26 @@ const nombreTecnico = document.getElementById('nombreTecnico');
 
 // Inicializar al cargar la página
 document.addEventListener('DOMContentLoaded', async function() {
-    // Solicitar permisos al iniciar (ubicación, cámara, notificaciones)
-    if (typeof solicitarPermisosIniciales === 'function') {
-        await solicitarPermisosIniciales();
-    }
+    console.log('🚀 [INICIO] DOMContentLoaded ejecutándose...');
 
-    // Configurar notificaciones push
-    if (typeof configurarNotificaciones === 'function') {
-        await configurarNotificaciones();
-    }
+    // NO solicitar permisos aquí - se hace en inicializarSistema()
+    // Esto evita duplicación que causa crashes
 
-    inicializarSistema();
-    configurarEventListeners();
-    iniciarActualizacionAutomatica(); // Iniciar actualización automática cada 10 segundos
+    try {
+        await inicializarSistema();
+        console.log('✅ [INICIO] inicializarSistema completado');
+
+        configurarEventListeners();
+        console.log('✅ [INICIO] configurarEventListeners completado');
+
+        iniciarActualizacionAutomatica();
+        console.log('✅ [INICIO] iniciarActualizacionAutomatica completado');
+
+        console.log('✅ [INICIO] App completamente inicializada');
+    } catch (error) {
+        console.error('❌ [INICIO] Error en DOMContentLoaded:', error);
+        mostrarAlerta('Error al inicializar la aplicación: ' + error.message, 'danger');
+    }
 });
 
 // Configurar event listeners
@@ -71,22 +78,30 @@ function configurarEventListeners() {
 // Inicializar sistema
 async function inicializarSistema() {
     try {
+        console.log('🔧 [INIT] Iniciando sistema...');
+
         // 1. SOLICITAR PERMISOS NECESARIOS (ubicación, cámara, notificaciones)
+        console.log('📋 [INIT] Solicitando permisos...');
         if (typeof window.solicitarPermisosIniciales === 'function') {
             const permisosOK = await window.solicitarPermisosIniciales();
+            console.log('📋 [INIT] Resultado permisos:', permisosOK);
             if (!permisosOK) {
                 // Si faltan permisos, la función ya mostró el mensaje de bloqueo
-                console.log('⚠️ Permisos faltantes - App bloqueada');
+                console.log('⚠️ [INIT] Permisos faltantes - App bloqueada');
                 return; // No continuar sin permisos
             }
         }
+        console.log('✅ [INIT] Permisos OK');
 
         // 2. CONFIGURAR LISTENERS DE NOTIFICACIONES
+        console.log('🔔 [INIT] Configurando notificaciones...');
         if (typeof window.configurarNotificaciones === 'function') {
             await window.configurarNotificaciones();
         }
+        console.log('✅ [INIT] Notificaciones configuradas');
 
         // 3. Mostrar nombre del técnico desde localStorage inmediatamente
+        console.log('👤 [INIT] Cargando datos de técnico...');
         const userTecnico = localStorage.getItem('user_tecnico') || sessionStorage.getItem('user_tecnico');
         if (userTecnico) {
             try {
@@ -94,20 +109,29 @@ async function inicializarSistema() {
                 if (user && user.nombre) {
                     nombreTecnico.textContent = user.nombre;
                     tecnicoActual = user;
+                    console.log('✅ [INIT] Técnico cargado:', user.nombre);
                 }
             } catch (e) {
-                console.error('Error parseando user_tecnico:', e);
+                console.error('❌ [INIT] Error parseando user_tecnico:', e);
             }
         }
 
         // 4. El usuario ya está autenticado (verificado en el HTML)
         // Verificar permisos para agregar cajas NAP
+        console.log('🔐 [INIT] Verificando permisos NAP...');
         await verificarPermisoAgregarNaps();
+        console.log('✅ [INIT] Permisos NAP verificados');
+
         // Cargar visitas asignadas directamente
+        console.log('📥 [INIT] Cargando visitas del técnico...');
         await cargarVisitasTecnico();
+        console.log('✅ [INIT] Visitas cargadas');
+
+        console.log('✅ [INIT] Sistema completamente inicializado');
     } catch (error) {
-        console.error('Error inicializando sistema:', error);
-        mostrarAlerta('Error inicializando el sistema', 'danger');
+        console.error('❌ [INIT] Error inicializando sistema:', error);
+        console.error('❌ [INIT] Stack trace:', error.stack);
+        mostrarAlerta('Error inicializando el sistema: ' + error.message, 'danger');
     }
 }
 

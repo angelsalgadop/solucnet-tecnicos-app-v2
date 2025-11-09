@@ -91,8 +91,9 @@ async function solicitarPermisosIniciales() {
 
                 if (resultado.receive === 'granted') {
                     // Registrar para recibir notificaciones
+                    console.log('🔔 Registrando notificaciones...');
                     await PushNotifications.register();
-                    console.log('✅ Notificaciones registradas');
+                    console.log('✅ Notificaciones registradas exitosamente');
                 } else {
                     permisosFaltantes.push('🔔 Notificaciones');
                     todosOtorgados = false;
@@ -107,14 +108,16 @@ async function solicitarPermisosIniciales() {
 
             // Si ya está otorgado, registrar de todos modos
             try {
+                console.log('🔔 Re-registrando notificaciones...');
                 await PushNotifications.register();
-                console.log('✅ Notificaciones re-registradas');
+                console.log('✅ Notificaciones re-registradas exitosamente');
             } catch (e) {
-                console.log('⚠️ Error re-registrando notificaciones:', e);
+                console.error('⚠️ Error re-registrando notificaciones:', e);
             }
         }
 
         // PASO 3: Verificar resultado final
+        console.log('🔍 Verificando resultado final de permisos...');
         if (permisosFaltantes.length > 0) {
             console.log('❌ Faltan permisos:', permisosFaltantes);
             mostrarMensajePermisosFaltantes(permisosFaltantes);
@@ -122,6 +125,7 @@ async function solicitarPermisosIniciales() {
         }
 
         console.log('✅ Todos los permisos otorgados correctamente');
+        console.log('🎉 Retornando TRUE desde solicitarPermisosIniciales');
         return true;
 
     } catch (error) {
