@@ -457,7 +457,25 @@ class OfflineManager {
                     const result = await response.json();
                     console.log(`✅ Reporte ${reporte.localId} sincronizado (ID servidor: ${result.reporteId})`);
 
-                    // Marcar como sincronizado
+                    // CRÍTICO: Actualizar reporte_id de las fotos asociadas ANTES de marcar como sincronizado
+                    const txFotos = this.db.transaction('offline-fotos', 'readwrite');
+                    const fotosStore = txFotos.objectStore('offline-fotos');
+                    const fotosIndex = fotosStore.index('reporte_id');
+
+                    const fotasDelReporte = await new Promise((resolve, reject) => {
+                        const request = fotosIndex.getAll(IDBKeyRange.only(reporte.localId));
+                        request.onsuccess = () => resolve(request.result || []);
+                        request.onerror = () => reject(request.error);
+                    });
+
+                    console.log(`🔄 Actualizando reporte_id de ${fotasDelReporte.length} fotos: ${reporte.localId} → ${result.reporteId}`);
+
+                    for (const foto of fotasDelReporte) {
+                        foto.reporte_id = result.reporteId; // Actualizar a serverId
+                        await fotosStore.put(foto);
+                    }
+
+                    // Marcar reporte como sincronizado
                     reporte.sincronizado = true;
                     reporte.serverId = result.reporteId;
                     await store.put(reporte);
