@@ -194,16 +194,22 @@ class OfflineManager {
         try {
             const tx = this.db.transaction(['offline-reportes', 'offline-fotos', 'offline-requests'], 'readonly');
 
-            // Usar promesas explícitas para getAll()
+            // Usar promesas explícitas para getAll() - SIN parámetros para evitar DataError
             const reportes = await new Promise((resolve, reject) => {
-                const request = tx.objectStore('offline-reportes').index('sincronizado').getAll(false);
-                request.onsuccess = () => resolve(request.result || []);
+                const request = tx.objectStore('offline-reportes').getAll();
+                request.onsuccess = () => {
+                    const results = request.result || [];
+                    resolve(results.filter(r => r.sincronizado === false));
+                };
                 request.onerror = () => reject(request.error);
             });
 
             const fotos = await new Promise((resolve, reject) => {
-                const request = tx.objectStore('offline-fotos').index('sincronizado').getAll(false);
-                request.onsuccess = () => resolve(request.result || []);
+                const request = tx.objectStore('offline-fotos').getAll();
+                request.onsuccess = () => {
+                    const results = request.result || [];
+                    resolve(results.filter(f => f.sincronizado === false));
+                };
                 request.onerror = () => reject(request.error);
             });
 
@@ -406,12 +412,14 @@ class OfflineManager {
 
         const tx = this.db.transaction('offline-reportes', 'readwrite');
         const store = tx.objectStore('offline-reportes');
-        const index = store.index('sincronizado');
 
-        // Usar promesa explícita para getAll()
+        // Usar promesa explícita para getAll() - SIN parámetros para evitar DataError
         const reportes = await new Promise((resolve, reject) => {
-            const request = index.getAll(false);
-            request.onsuccess = () => resolve(request.result || []);
+            const request = store.getAll();
+            request.onsuccess = () => {
+                const results = request.result || [];
+                resolve(results.filter(r => r.sincronizado === false));
+            };
             request.onerror = () => reject(request.error);
         });
 
@@ -446,8 +454,16 @@ class OfflineManager {
 
         const tx = this.db.transaction('offline-fotos', 'readwrite');
         const store = tx.objectStore('offline-fotos');
-        const index = store.index('sincronizado');
-        const fotos = await index.getAll(false);
+
+        // Usar promesa explícita para getAll() - SIN parámetros para evitar DataError
+        const fotos = await new Promise((resolve, reject) => {
+            const request = store.getAll();
+            request.onsuccess = () => {
+                const results = request.result || [];
+                resolve(results.filter(f => f.sincronizado === false));
+            };
+            request.onerror = () => reject(request.error);
+        });
 
         console.log(`📤 [OFFLINE MANAGER] Sincronizando ${fotos.length} fotos...`);
 
