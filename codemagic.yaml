@@ -4,13 +4,7 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m1
     environment:
-      android_signing:
-        # Para debug build, no se requiere firma
-        # Si necesitas release firmado, agrega aquí tu keystore
-      groups:
-        # Agrega aquí variables de entorno si las necesitas
       vars:
-        # Variables del proyecto Capacitor
         CAPACITOR_ANDROID_GRADLE_VERSION: 8.2.2
       node: 18.19.0
     scripts:
