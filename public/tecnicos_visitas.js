@@ -131,9 +131,10 @@ async function cargarVisitasTecnico(mostrarSpinner = true) {
         if (hashNuevo !== hashVisitasAnterior || visitasAsignadas.length === 0) {
             console.log('✅ Datos actualizados detectados, recargando vista');
 
-            // GUARDAR filtro de localidad activo ANTES de recargar
+            // GUARDAR filtros activos ANTES de recargar
             const filtroLocalidadActual = document.getElementById('filtroLocalidad')?.value || '';
-            console.log(`💾 Guardando filtro de localidad actual: "${filtroLocalidadActual}"`);
+            const filtroEstadoActual = document.getElementById('filtroEstado')?.value || '';
+            console.log(`💾 Guardando filtros - Localidad: "${filtroLocalidadActual}", Estado: "${filtroEstadoActual}"`);
 
             // FILTRAR visitas completadas ANTES de asignar (nunca mostrarlas)
             const visitasSinCompletar = resultado.visitas.filter(v => v.estado !== 'completada');
@@ -143,15 +144,29 @@ async function cargarVisitasTecnico(mostrarSpinner = true) {
             visitasSinFiltrar = [...visitasSinCompletar]; // Copia para filtros
             llenarFiltroLocalidades();
 
-            // RESTAURAR filtro de localidad después de recargar
+            // RESTAURAR filtros después de recargar
+            let filtrosAplicados = false;
+
             if (filtroLocalidadActual) {
                 const selectLocalidad = document.getElementById('filtroLocalidad');
                 if (selectLocalidad) {
                     selectLocalidad.value = filtroLocalidadActual;
-                    console.log(`🔄 Filtro de localidad restaurado: "${filtroLocalidadActual}"`);
-                    // Aplicar filtros automáticamente para restaurar la vista filtrada
-                    aplicarFiltros();
+                    filtrosAplicados = true;
                 }
+            }
+
+            if (filtroEstadoActual) {
+                const selectEstado = document.getElementById('filtroEstado');
+                if (selectEstado) {
+                    selectEstado.value = filtroEstadoActual;
+                    filtrosAplicados = true;
+                }
+            }
+
+            if (filtrosAplicados) {
+                console.log(`🔄 Filtros restaurados - Localidad: "${filtroLocalidadActual}", Estado: "${filtroEstadoActual}"`);
+                // Aplicar filtros automáticamente para restaurar la vista filtrada
+                aplicarFiltros();
             } else {
                 mostrarVisitasAsignadas();
             }
