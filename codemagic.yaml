@@ -10,10 +10,7 @@ workflows:
     scripts:
       - name: Install npm dependencies
         script: |
-          npm install
-      - name: Install Capacitor dependencies
-        script: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npm ci
       - name: Copy web assets to native project
         script: |
           npx cap sync android
@@ -23,7 +20,8 @@ workflows:
       - name: Build Android APK (Debug)
         script: |
           cd android
-          ./gradlew assembleDebug
+          ./gradlew clean
+          ./gradlew assembleDebug --stacktrace
     artifacts:
       - android/app/build/outputs/**/*.apk
     publishing:
