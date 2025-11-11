@@ -1,0 +1,41 @@
+workflows:
+  android-workflow:
+    name: Android Workflow
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      android_signing:
+        # Para debug build, no se requiere firma
+        # Si necesitas release firmado, agrega aquí tu keystore
+      groups:
+        # Agrega aquí variables de entorno si las necesitas
+      vars:
+        # Variables del proyecto Capacitor
+        CAPACITOR_ANDROID_GRADLE_VERSION: 8.2.2
+      node: 18.19.0
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm install
+      - name: Install Capacitor dependencies
+        script: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+      - name: Copy web assets to native project
+        script: |
+          npx cap sync android
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Build Android APK (Debug)
+        script: |
+          cd android
+          ./gradlew assembleDebug
+    artifacts:
+      - android/app/build/outputs/**/*.apk
+    publishing:
+      email:
+        recipients:
+          - angelsalgadop@github.com
+        notify:
+          success: true
+          failure: true
